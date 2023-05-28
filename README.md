@@ -1,6 +1,6 @@
 # registro
 
-A new Flutter project.
+Progetto di Flutter svolto per una presentazione scolastica
 
 ## Getting Started
 
