@@ -6,8 +6,8 @@ import 'package:registro/mysql/utente.dart';
 
 class SelectedClass extends StatefulWidget {
   final String className;
-
-  SelectedClass({required this.className});
+  final String nome_materia;
+  SelectedClass({required this.className , required this.nome_materia});
 
   @override
   _SelectedClassState createState() => _SelectedClassState();
@@ -24,7 +24,7 @@ class _SelectedClassState extends State<SelectedClass> {
 
   Future<void> fetchStudents() async {
     try {
-      List<Map<String, dynamic>>? studentList = await getStudenti(1); // devo mettere l'id della classe
+      List<Map<String, dynamic>>? studentList = await getStudenti(idClasse_!); // devo mettere l'id della classe
       if (studentList != null) {
         List<String> studentNames = studentList
             .map((student) => '${student['nome']} ${student['cognome']}')
@@ -48,10 +48,13 @@ class _SelectedClassState extends State<SelectedClass> {
       body: Center(
         child: Column(
           children: [
-            
+            Text(
+              'Classe: ${widget.className} ',
+              style: TextStyle(fontSize: 24.sp, color: Colors.black),
+            ),
             SizedBox(height: 20.h),
             Text(
-              'Studenti:',
+              "Materia: ${widget.nome_materia}",
               style: TextStyle(fontSize: 20.sp, color: Colors.black),
             ),
             Expanded(

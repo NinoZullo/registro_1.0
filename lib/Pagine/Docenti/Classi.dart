@@ -33,7 +33,7 @@ class _ClassiState extends State<Classi> {
 
   Future<void> fetchClassi() async {
     try {
-      List<Map<String, dynamic>>? classListData = await getClassi(1); // devo mettere l'id Del max
+      List<Map<String, dynamic>>? classListData = await getClassi(idUtente_!);
       if (classListData != null) {
         setState(() {
           classList = classListData ?? [];
@@ -83,7 +83,7 @@ class _ClassiState extends State<Classi> {
           ),
           SizedBox(height: 10.h),
           Text(
-            "$nome_ $cognome_",
+            "Benvenuto!",
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class _ClassiState extends State<Classi> {
           ),
           SizedBox(height: 10.h),
           Text(
-            'Docente',
+            'Professore',
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.normal,
@@ -103,15 +103,18 @@ class _ClassiState extends State<Classi> {
             child: ListView.builder(
               itemCount: classList.length,
               itemBuilder: (BuildContext context, int index) {
+                final nomeMateria = classList[index]['nome_materia'];
                 final className = classList[index]['nome_classe'];
+                print('Class: $className');
+                print('Subject: $nomeMateria');
                 return Padding(
                   padding: _rowPadding,
                   child: ButtonSVG(
                     context,
                     Colors.white,
                     className,
-                    SelectedClass(className: className),
-                    'assets/icons/$className.svg',
+                    SelectedClass(className: className, nome_materia: nomeMateria),
+                    'assets',
                   ),
                 );
               },
