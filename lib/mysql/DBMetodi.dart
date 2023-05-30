@@ -238,30 +238,41 @@ formato:
 - String nome (dello studente)
 - String cognome (dello studente)
  */
-  Future<List<Map<String, dynamic>>?> getStudenti(String nomeClasse) async {
+  Future<List<Map<String, dynamic>>?> getStudenti(int idClasse) async {
     var db = Mysql();
     final conn = await db.getConnection();
     var results = await conn.query(
-        "SELECT id_studente, nome, cognome "
+        "SELECT id_studente, nome, cognome, id_classe"
             "FROM studenti "
-            "WHERE classi.nomeClasse = $nomeClasse");
+            "INNER JOIN classi ON classi.id_classe = studenti.id_classe"
+            "WHERE classi.id_classe = $idClasse");
     await conn.close();
     return results.map((row) => row.fields).toList();
   }
-}
-Future<int?> getOrePCTO(int idUtente) async {
-  var db = Mysql();
-  final conn = await db.getConnection();
-  var results = await conn.query(
-      "SELECT SUM(ore) AS ore_pcto "
-          "FROM ore_pcto "
-          "WHERE id_studente = $idUtente");
-  await conn.close();
 
-  if (results.isNotEmpty) {
-    var orePCTO = results.first.fields['ore_pcto'] as int?;
-    return orePCTO;
+
+/*
+formato:
+- String nome_classe
+_ String nome_materia
+- Time ora_inizio
+- Time ora_fine, giorno
+- String giorno
+*/
+
+
+  Future<List<Map<String, dynamic>>?> getOreDocenti() async {
+    var db = Mysql();
+    final conn = await db.getConnection();
+    var results = await conn.query(
+        "SELECT nome_classe, nome_materia, ora_inizio, ora_fine, giorno"
+            "FROM orari_assegnazioni"
+            "INNER JOIN assegnazioni ON orari_assegnazioni.id_assegnazione = assegnazioni.id_assegnazione"
+            "INNER JOIN materie ON assegnazioni.id_materia = materie.id_materia"
+            "INNER JOIN classi ON assegnazioni.id_classe = classi.id_classe"
+            "INNER JOIN giorni ON orari_assegnazioni.id_giorno = giorni.id_giorno"
+            "WHERE assegnazioni.id_docente = $idUtente_");
+    await conn.close();
+    return results.map((row) => row.fields).toList();
   }
-
-  return null; // Se non ci sono ore PCTO per l'utente
 }

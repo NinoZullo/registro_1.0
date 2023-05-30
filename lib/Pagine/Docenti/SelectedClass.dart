@@ -6,10 +6,11 @@ import 'package:registro/mysql/Utente.dart';
 class SelectedClass extends StatefulWidget {
   final String className;
   final String nomeMateria;
-
+  final int idClasse;
   SelectedClass({
     required this.className,
     required this.nomeMateria,
+    required this.idClasse,
   });
 
   @override
@@ -17,17 +18,13 @@ class SelectedClass extends StatefulWidget {
 }
 
 class _SelectedClassState extends State<SelectedClass> {
-  List<Map<String, dynamic>>? studenti;
+  Future<List<Map<String, dynamic>>>? studentiFuture;
   DBMetodi db = DBMetodi();
 
   @override
   void initState() {
     super.initState();
-    db.getStudenti(widget.className).then((value) {
-      setState(() {
-        studenti = value;
-      });
-    });
+    studentiFuture = db.getStudenti(widget.idClasse!) as Future<List<Map<String, dynamic>>>?;
   }
 
   @override
@@ -43,34 +40,55 @@ class _SelectedClassState extends State<SelectedClass> {
           ),
         ),
       ),
-      body: Container(
-        width: 150.0,
-        height: 200.0,
-        child: ListView.builder(
-          itemCount: studenti?.length ?? 0,
-          itemBuilder: (context, index) {
-            final studente = studenti![index];
-            final idStudente = studente['id_studente'].toString();
-            final nome = studente['nome'].toString();
-            final cognome = studente['cognome'].toString();
-
-            return Container(
-              height: 50.0.h,
-              child: ListTile(
-                leading: const CircleAvatar(
-                  backgroundColor: Colors.purple,
-                ),
-                title: Text(
-                  "$nome $cognome",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: studentiFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ),
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text('Error fetching student data'),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text('No student data available'),
+            );
+          }
+
+          final studenti = snapshot.data!;
+
+          return Container(
+            width: 150.0,
+            height: 200.0,
+            child: ListView.builder(
+              itemCount: studenti.length,
+              itemBuilder: (context, index) {
+                final studente = studenti[index];
+                final idStudente = studente['id_studente'].toString();
+                final nome = studente['nome'].toString();
+                final cognome = studente['cognome'].toString();
+
+                return Container(
+                  height: 50.0,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.purple,
+                    ),
+                    title: Text(
+                      "$nome $cognome",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

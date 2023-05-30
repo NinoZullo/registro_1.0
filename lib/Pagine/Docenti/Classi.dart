@@ -15,7 +15,6 @@ class Classi extends StatefulWidget {
 class _ClassiState extends State<Classi> {
   List<Map<String, dynamic>>? classi;
   DBMetodi db = DBMetodi();
-
   @override
   void initState() {
     super.initState();
@@ -44,15 +43,14 @@ class _ClassiState extends State<Classi> {
         itemCount: classi?.length ?? 0,
         itemBuilder: (context, index) {
           if (classi == null) {
-            // Handle the case when classi is null, such as showing a loading spinner
             return CircularProgressIndicator();
           }
 
           final classe = classi![index];
-          final idAssegnazione = classe['id_assegnazione'].toString();
+          // final idAssegnazione = classe['id_assegnazione'].toString();
           final nomeClasse = classe['nome_classe'].toString();
           final nomeMateria = classe['nome_materia'].toString();
-
+          final idClasse = int.parse(classe['id_classe']);
           return Padding(
             padding: EdgeInsets.all(10.0.w),
             child: Clas(
@@ -61,9 +59,9 @@ class _ClassiState extends State<Classi> {
               nomeClasse,
               nomeMateria,
               SelectedClass(
-                className: nomeClasse,
-                nomeMateria: nomeMateria,
-              ),
+                  className: nomeClasse,
+                  nomeMateria: nomeMateria,
+                  idClasse: idClasse),
             ),
           );
         },
