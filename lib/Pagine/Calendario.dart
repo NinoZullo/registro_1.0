@@ -20,7 +20,7 @@ class _CalendarioState extends State<Calendario> {
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
   late EventiManager eventiManager;
-
+  int _selectedIndex = 0;
   TextEditingController _eventController = TextEditingController();
 
   @override
@@ -138,7 +138,8 @@ class _CalendarioState extends State<Calendario> {
                 return Padding(
                   padding: EdgeInsets.only(left: 10.0, right: 10.0),
                   child: Container(
-                    child: Text("${event.title}\n${eventDate.day}/${eventDate.month}/${eventDate.year}"),
+                    child: Text(
+                        "${event.title}\n${eventDate.day}/${eventDate.month}/${eventDate.year}"),
                   ),
                 );
               },
@@ -187,6 +188,54 @@ class _CalendarioState extends State<Calendario> {
         ),
         label: Text("Aggiungi evento"),
         icon: Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        items: [
+          It("Calendario", Icons.calendar_month),
+          It("Menù", Icons.menu),
+          It("Home", Icons.home),
+          It("PCTO", Icons.engineering),
+          It("Profilo", Icons.person),
+        ],
+        onTap: (currentIndex) {
+          switch (currentIndex) {
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => menu(),
+                ),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  HomePage(),
+                ),
+              );
+              break;
+            case 3:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PCTO(),
+                ),
+              );
+              break;
+            case 4:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => profilo(),
+                ),
+              );
+              break;
+          }
+        },
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
       ),
     );
   }

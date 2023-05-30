@@ -5,6 +5,7 @@
  * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
+import 'package:mysql1/mysql1.dart' as mysql;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,12 +20,13 @@ import 'package:registro/mysql/DBMetodi.dart';
 import 'package:registro/mysql/Utente.dart';
 class PaginaLogin extends StatefulWidget {
   const PaginaLogin({Key? key}) : super(key: key);
-
   @override
   State<PaginaLogin> createState() => _PaginaLoginState();
 }
 
 class _PaginaLoginState extends State<PaginaLogin> {
+  DBMetodi db = DBMetodi();
+
   bool _rememberMe = false;
   TextEditingController nomeCognomeController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -161,7 +163,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
                           ? null
                           : () async {
                         bool isLoggedIn =
-                        await login(
+                        await db.login(
                           nomeCognomeController.text,
                           passwordController.text,
                         );

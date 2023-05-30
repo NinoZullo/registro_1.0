@@ -423,3 +423,61 @@ Widget ContainerVoti({
 }
 
 
+Widget Clas(
+    BuildContext context,
+    Color color,
+    String nomeClasse,
+    String nomeMateria,
+    Widget destination,
+    ) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => destination),
+      );
+    },
+    child: Container(
+      width: 160.0.w,
+      height: 90.0.h,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+          color: Colors.black,
+          width: 1.0.w,
+        ),
+      ),
+      padding: EdgeInsets.all(10.0.w),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 10.h,
+            left: 5.w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  nomeClasse,
+                  style: TextStyle(
+                    fontSize: 19.0.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  nomeMateria,
+                  style: TextStyle(
+                    fontSize: 16.0.sp,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

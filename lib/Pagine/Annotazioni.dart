@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:registro/Pagine/Widget/HeaderHeight.dart';
+import 'package:registro/Palette/Palette.dart';
+import 'package:registro/mysql/DBMetodi.dart';
+import 'package:registro/mysql/Utente.dart';
 
 class Annotazioni extends StatefulWidget {
   const Annotazioni({Key? key}) : super(key: key);
@@ -10,11 +13,19 @@ class Annotazioni extends StatefulWidget {
 }
 
 class _AnnotazioniState extends State<Annotazioni> {
-  List<String> Annotazioni = [
-    'Compito non svolto',
-    'Libro di italiano dimenticato a casa',
-    //TODO : Canto fai in modo che prenda i dati dal database
-  ];
+  List<String> annotazioni = [];
+  DBMetodi db = DBMetodi();
+
+  @override
+  void initState() {
+    super.initState();
+    db.getAnnotazioni(idUtente_).then((value) {
+      setState(() {
+        annotazioni = value!.map((annotazione) => annotazione['descrizione'].toString()).toList();
+        print(annotazioni);
+      });
+    });
+  }
 
   double _headerHeight = 100.h;
 
@@ -22,7 +33,7 @@ class _AnnotazioniState extends State<Annotazioni> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Assenze"),
+        title: const Text("Annotazio"),
         centerTitle: true,
       ),
       body: Column(
@@ -37,7 +48,7 @@ class _AnnotazioniState extends State<Annotazioni> {
               children: [
                 CircleAvatar(
                   radius: 40.r,
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: blu1,
                   child: Icon(
                     Icons.person,
                     size: 50.sp,
@@ -46,11 +57,10 @@ class _AnnotazioniState extends State<Annotazioni> {
                 ),
               ],
             ),
-
           ),
           SizedBox(height: 10.h),
           Text(
-            'Nome Cognome',
+            '$nome_ $cognome_',
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
@@ -82,20 +92,21 @@ class _AnnotazioniState extends State<Annotazioni> {
                   SizedBox(height: 8.h),
                   Container(
                     constraints: BoxConstraints(
-                      maxHeight:
-                      double.infinity.h,
+                      maxHeight: double.infinity.h,
                     ),
                     child: SingleChildScrollView(
                       child: Column(
-                        children: Annotazioni.map((Annotazione) {
+                        children: annotazioni.map((annotazione) {
                           return ListTile(
                             leading: const CircleAvatar(
                               backgroundColor: Colors.purple,
                             ),
                             title: Text(
-                              Annotazione,
+                              annotazione,
                               style: TextStyle(
-                                  fontSize: 16.sp, color: Colors.black),
+                                fontSize: 16.sp,
+                                color: Colors.black,
+                              ),
                             ),
                           );
                         }).toList(),

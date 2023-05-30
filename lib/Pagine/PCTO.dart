@@ -9,6 +9,7 @@ import 'package:registro/Pagine/menu.dart';
 import 'package:registro/Palette/Palette.dart';
 import 'package:registro/metodi/Metodi.dart';
 import 'package:registro/Pagine/Widget/HeaderHeight.dart';
+import 'package:registro/mysql/Utente.dart';
 
 class PCTO extends StatefulWidget {
   const PCTO({Key? key}) : super(key: key);
@@ -18,11 +19,6 @@ class PCTO extends StatefulWidget {
 }
 
 class _PCTOState extends State<PCTO> {
-  void _toggleTheme() {
-    setState(() {
-      isDarkMode = !isDarkMode;
-    });
-  }
 
   double _headerHeight = 100.h;
   EdgeInsetsGeometry _rowPadding =
@@ -115,9 +111,9 @@ class _PCTOState extends State<PCTO> {
                   ),
                   SizedBox(height: 10.h),
                   Text(
-                    'Nome Cognome',
+                    '$nome_ $cognome_',
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 19.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),

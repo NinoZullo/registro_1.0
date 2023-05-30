@@ -1,9 +1,9 @@
 import 'package:mysql1/src/single_connection.dart';
 import 'Mysql.dart';
 import 'Utente.dart';
+class DBMetodi {
 
-Mysql db = Mysql();
-
+  Mysql db = Mysql();
 
   Future<bool> login(String username, String password) async {
     var db = Mysql();
@@ -238,13 +238,30 @@ formato:
 - String nome (dello studente)
 - String cognome (dello studente)
  */
-  Future<List<Map<String, dynamic>>?> getStudenti(int idClasse) async {
+  Future<List<Map<String, dynamic>>?> getStudenti(String nomeClasse) async {
     var db = Mysql();
     final conn = await db.getConnection();
     var results = await conn.query(
         "SELECT id_studente, nome, cognome "
             "FROM studenti "
-            "WHERE classi.id_classe = $idClasse");
+            "WHERE classi.nomeClasse = $nomeClasse");
     await conn.close();
     return results.map((row) => row.fields).toList();
   }
+}
+Future<int?> getOrePCTO(int idUtente) async {
+  var db = Mysql();
+  final conn = await db.getConnection();
+  var results = await conn.query(
+      "SELECT SUM(ore) AS ore_pcto "
+          "FROM ore_pcto "
+          "WHERE id_studente = $idUtente");
+  await conn.close();
+
+  if (results.isNotEmpty) {
+    var orePCTO = results.first.fields['ore_pcto'] as int?;
+    return orePCTO;
+  }
+
+  return null; // Se non ci sono ore PCTO per l'utente
+}

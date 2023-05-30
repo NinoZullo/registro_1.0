@@ -20,11 +20,12 @@ class VInformatica extends StatefulWidget {
 
 class _VInformaticaState extends State<VInformatica> {
   List<Map<String, dynamic>>? voti;
+  DBMetodi db = DBMetodi();
 
   @override
   void initState() {
     super.initState();
-    getVoti().then((value) {
+    db.getVoti().then((value) {
       setState(() {
         voti = value;
         print(voti);

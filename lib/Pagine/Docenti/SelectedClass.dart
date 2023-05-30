@@ -1,83 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:registro/mysql/DBMetodi.dart';
-import 'package:registro/mysql/mysql.dart';
-import 'package:registro/mysql/utente.dart';
+import 'package:registro/mysql/Utente.dart';
 
 class SelectedClass extends StatefulWidget {
   final String className;
-  final String nome_materia;
-  SelectedClass({required this.className , required this.nome_materia});
+  final String nomeMateria;
+
+  SelectedClass({
+    required this.className,
+    required this.nomeMateria,
+  });
 
   @override
   _SelectedClassState createState() => _SelectedClassState();
 }
 
 class _SelectedClassState extends State<SelectedClass> {
-  List<String> students = [];
+  List<Map<String, dynamic>>? studenti;
+  DBMetodi db = DBMetodi();
 
   @override
   void initState() {
     super.initState();
-    fetchStudents();
+    db.getStudenti(widget.className).then((value) {
+      setState(() {
+        studenti = value;
+      });
+    });
   }
-
-  Future<void> fetchStudents() async {
-    try {
-      List<Map<String, dynamic>>? studentList = await getStudenti(idClasse_!); // devo mettere l'id della classe
-      if (studentList != null) {
-        List<String> studentNames = studentList
-            .map((student) => '${student['nome']} ${student['cognome']}')
-            .toList();
-        setState(() {
-          students = studentNames;
-        });
-      }
-    } catch (e) {
-  print("Errore");
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.className}'),
+        title: Text(
+          "${widget.className}",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Text(
-              'Classe: ${widget.className} ',
-              style: TextStyle(fontSize: 24.sp, color: Colors.black),
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              "Materia: ${widget.nome_materia}",
-              style: TextStyle(fontSize: 20.sp, color: Colors.black),
-            ),
-            Expanded(
-              child: Container(
-                width: 100.w,
-                height: 100.h,
-                child: ListView.builder(
-                  itemCount: students.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(
-                        students[index],
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  },
+      body: Container(
+        width: 150.0,
+        height: 200.0,
+        child: ListView.builder(
+          itemCount: studenti?.length ?? 0,
+          itemBuilder: (context, index) {
+            final studente = studenti![index];
+            final idStudente = studente['id_studente'].toString();
+            final nome = studente['nome'].toString();
+            final cognome = studente['cognome'].toString();
+
+            return Container(
+              height: 50.0.h,
+              child: ListTile(
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.purple,
+                ),
+                title: Text(
+                  "$nome $cognome",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
   }
-
 }

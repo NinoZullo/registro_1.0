@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:registro/Pagine/Widget/HeaderHeight.dart';
+import 'package:registro/mysql/DBMetodi.dart';
+import 'package:registro/mysql/Utente.dart';
 
 class Assenze extends StatefulWidget {
   const Assenze({Key? key}) : super(key: key);
@@ -10,19 +12,23 @@ class Assenze extends StatefulWidget {
 }
 
 class _AssenzeState extends State<Assenze> {
-  List<String> assenzeGiustificate = [
-    '02/03/2023',
-    '19/02/2023',
-    //TODO : Canto fai in modo che prenda i dati dal database
-  ];
+  List<Map<String, dynamic>>? assenze;
+  List<Map<String, dynamic>>? assenzeGiustificate;
+  List<Map<String, dynamic>>? assenzeNonGiustificate;
+  DBMetodi db = DBMetodi();
+  double _headerHeight = 100.h;
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
-  List<String> assenzeNonGiustificate = [
-    '02/03/2023',
-    '19/02/2023',
-    //TODO : Canto fai in modo che prenda i dati dal database
-  ];
-  final double _headerHeight = 100.h;
-
+  Future<void> fetchData() async {
+    assenze = await db.getAssenze(idUtente_);
+    assenzeGiustificate = assenze?.where((assenza) => assenza['giustificata'] == 1).toList();
+    assenzeNonGiustificate = assenze?.where((assenza) => assenza['giustificata'] == 0).toList();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,23 +74,26 @@ class _AssenzeState extends State<Assenze> {
                 SizedBox(height: 8.h),
                 Container(
                   constraints: BoxConstraints(
-                    maxHeight:
-                        265.h,
+                    maxHeight: 265.h,
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      children: assenzeGiustificate.map((assenza) {
+                      children: assenzeGiustificate?.map((assenza) {
+                        final dataInizio = assenza['data_inizio'].toString();
+                        final dataFine = assenza['data_fine'].toString();
                         return ListTile(
                           leading: const CircleAvatar(
                             backgroundColor: Colors.green,
                           ),
                           title: Text(
-                            assenza,
+                            '$dataInizio - $dataFine',
                             style: TextStyle(
-                                fontSize: 18.sp, color: Colors.black),
+                              fontSize: 18.sp,
+                              color: Colors.black,
+                            ),
                           ),
                         );
-                      }).toList(),
+                      }).toList() ?? [],
                     ),
                   ),
                 ),
@@ -100,23 +109,26 @@ class _AssenzeState extends State<Assenze> {
                 SizedBox(height: 8.h),
                 Container(
                   constraints: BoxConstraints(
-                    maxHeight:
-                        265.h,
+                    maxHeight: 265.h,
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      children: assenzeNonGiustificate.map((assenza) {
+                      children: assenzeNonGiustificate?.map((assenza) {
+                        final dataInizio = assenza['data_inizio'].toString();
+                        final dataFine = assenza['data_fine'].toString();
                         return ListTile(
-                          leading: const CircleAvatar(
+                          leading: CircleAvatar(
                             backgroundColor: Colors.red,
                           ),
                           title: Text(
-                            assenza,
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.black),
+                            '$dataInizio - $dataFine',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.black,
+                            ),
                           ),
                         );
-                      }).toList(),
+                      }).toList() ?? [],
                     ),
                   ),
                 ),
