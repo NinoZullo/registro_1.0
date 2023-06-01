@@ -1,4 +1,3 @@
-import 'package:mysql1/src/single_connection.dart';
 import 'Mysql.dart';
 import 'Utente.dart';
 class DBMetodi {
@@ -94,8 +93,8 @@ formato:
 - double voto
 - String tipo (P, O, S)
 - String data_inserimento (yyyy-mm-gg hh:mm:ss)
-- int id_studente (lo ottieni quando fai getStudenti)
-- id_assegnazione (lo ottieni quando fai getClassi)
+- int id_studente 
+- id_assegnazione 
  */
   void addVoto(double voto, String tipo, String data_inserimento,
       int id_studente, int id_assegnazione) async {
@@ -214,11 +213,11 @@ formato:
 
 /*
 formato:
-- int id_assegnazione (salvatelo da qulche parte che poi ti servirà per aggiungere voti, note, ecc.)
+- int id_assegnazione 
 - String nome_classe
 - String nome_materia
  */
-  Future<List<Map<String, dynamic>>?> getClassi(int idUtente) async {
+  Future<List<Map<String, dynamic>>?> getClassi() async {
     var db = Mysql();
     final conn = await db.getConnection();
     var results = await conn.query(
@@ -227,14 +226,14 @@ formato:
             "INNER JOIN docenti ON assegnazioni.id_docente = docenti.id_docente "
             "INNER JOIN materie ON assegnazioni.id_materia = materie.id_materia "
             "INNER JOIN classi ON assegnazioni.id_classe = classi.id_classe "
-            "WHERE assegnazioni.id_docente = $idUtente");
+            "WHERE assegnazioni.id_docente = $idUtente_");
     await conn.close();
     return results.map((row) => row.fields).toList();
   }
 
 /*
 formato:
-- int id_studente (salvatelo da qualche parte che ti serve se devi inserire voti, note, ecc.)
+- int id_studente
 - String nome (dello studente)
 - String cognome (dello studente)
  */
@@ -242,7 +241,7 @@ formato:
     var db = Mysql();
     final conn = await db.getConnection();
     var results = await conn.query(
-        "SELECT id_studente, nome, cognome, id_classe"
+        "SELECT id_studente, nome, cognome, classi.id_classe"
             "FROM studenti "
             "INNER JOIN classi ON classi.id_classe = studenti.id_classe"
             "WHERE classi.id_classe = $idClasse");

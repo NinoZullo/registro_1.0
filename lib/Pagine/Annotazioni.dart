@@ -13,27 +13,57 @@ class Annotazioni extends StatefulWidget {
 }
 
 class _AnnotazioniState extends State<Annotazioni> {
-  List<String> annotazioni = [];
+  List<Map<String, dynamic>> annotazioni = [];
   DBMetodi db = DBMetodi();
+  double _headerHeight = 100.h;
 
   @override
   void initState() {
     super.initState();
-    db.getAnnotazioni(idUtente_).then((value) {
-      setState(() {
-        annotazioni = value!.map((annotazione) => annotazione['descrizione'].toString()).toList();
-        print(annotazioni);
-      });
+    fetchAnnotazioni();
+  }
+
+  Future<void> fetchAnnotazioni() async {
+    final fetchedAnnotazioni = await db.getAnnotazioni(idUtente_);
+    setState(() {
+      annotazioni = fetchedAnnotazioni ?? [];
     });
   }
 
-  double _headerHeight = 100.h;
+  Color getColorForType(String type) {
+    switch (type) {
+      case '+':
+        return Colors.green;
+      case '-':
+        return Colors.grey;
+      case '*':
+        return Colors.grey;
+      case 'GR':
+        return Colors.red;
+      case 'IN':
+        return Colors.redAccent;
+      case 'NTS':
+        return Colors.orange;
+      case 'SU':
+        return Colors.green;
+      case 'DI':
+        return Colors.green;
+      case 'BU':
+        return Colors.lightGreen;
+      case 'DS':
+        return Colors.cyan;
+      case 'OT':
+        return Colors.blue;
+      default:
+        return Colors.grey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Annotazio"),
+        title: const Text("Annotazioni"),
         centerTitle: true,
       ),
       body: Column(
@@ -55,31 +85,33 @@ class _AnnotazioniState extends State<Annotazioni> {
                     color: Colors.white,
                   ),
                 ),
+                SizedBox(height: 10.h),
+                Text(
+                  '$nome_ $cognome_',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  'Studente',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black,
+                  ),
+                ),
               ],
-            ),
-          ),
-          SizedBox(height: 10.h),
-          Text(
-            '$nome_ $cognome_',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(height: 10.h),
-          Text(
-            'Studente',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.normal,
-              color: Colors.black,
             ),
           ),
           SizedBox(height: 16.h),
           Expanded(
-            child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Annotazioni:',
@@ -90,27 +122,45 @@ class _AnnotazioniState extends State<Annotazioni> {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  Container(
-                    constraints: BoxConstraints(
-                      maxHeight: double.infinity.h,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: annotazioni.map((annotazione) {
-                          return ListTile(
-                            leading: const CircleAvatar(
-                              backgroundColor: Colors.purple,
-                            ),
-                            title: Text(
-                              annotazione,
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: annotazioni.length,
+                      itemBuilder: (context, index) {
+                        final annotazione = annotazioni[index];
+                        final iconType = annotazione['nome_corto'] as String;
+                        final description = annotazione['descrizione'] as String;
+                        final date = annotazione['data_inserimento'] as DateTime;
+                        final teacherName = annotazione['nome'] as String;
+                        final teacherSurname = annotazione['cognome'] as String;
+                        final subjectName = annotazione['nome_materia'] as String;
+                        final color = getColorForType(iconType);
+
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: color,
+                            child: Text(
+                              iconType,
                               style: TextStyle(
-                                fontSize: 16.sp,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
+                          ),
+                          title: Text(
+                            description,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.black,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '$teacherName $teacherSurname - $subjectName',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

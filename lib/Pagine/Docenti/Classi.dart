@@ -18,7 +18,7 @@ class _ClassiState extends State<Classi> {
   @override
   void initState() {
     super.initState();
-    db.getClassi(idUtente_).then((value) {
+    db.getClassi().then((value) {
       setState(() {
         classi = value;
         print(classi);

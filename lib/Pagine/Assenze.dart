@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:registro/Pagine/Widget/HeaderHeight.dart';
+import 'package:registro/Palette/Palette.dart';
 import 'package:registro/mysql/DBMetodi.dart';
 import 'package:registro/mysql/Utente.dart';
+import 'package:intl/intl.dart';
 
 class Assenze extends StatefulWidget {
   const Assenze({Key? key}) : super(key: key);
@@ -17,6 +19,8 @@ class _AssenzeState extends State<Assenze> {
   List<Map<String, dynamic>>? assenzeNonGiustificate;
   DBMetodi db = DBMetodi();
   double _headerHeight = 100.h;
+  final DateFormat _dateFormat = DateFormat('dd-MM-yyyy');
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +31,8 @@ class _AssenzeState extends State<Assenze> {
     assenze = await db.getAssenze(idUtente_);
     assenzeGiustificate = assenze?.where((assenza) => assenza['giustificata'] == 1).toList();
     assenzeNonGiustificate = assenze?.where((assenza) => assenza['giustificata'] == 0).toList();
+    assenzeGiustificate?.sort((a, b) => a['data_inizio'].compareTo(b['data_inizio']));
+    assenzeNonGiustificate?.sort((a, b) => a['data_inizio'].compareTo(b['data_inizio']));
     setState(() {});
   }
 
@@ -49,13 +55,15 @@ class _AssenzeState extends State<Assenze> {
               children: [
                 CircleAvatar(
                   radius: 40.r,
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: blu1,
                   child: Icon(
                     Icons.person,
                     size: 50.sp,
                     color: Colors.white,
                   ),
                 ),
+                SizedBox(height: 10.h),
+                Text("$nome_ $cognome_", style: TextStyle(color: Colors.black , fontSize: 18.sp),),
               ],
             ),
           ),
@@ -63,26 +71,17 @@ class _AssenzeState extends State<Assenze> {
           SingleChildScrollView(
             child: Column(
               children: [
-                Text(
-                  'Assenze giustificate:',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 8.h),
                 Container(
                   constraints: BoxConstraints(
                     maxHeight: 265.h,
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      children: assenzeGiustificate?.map((assenza) {
-                        final dataInizio = assenza['data_inizio'].toString();
-                        final dataFine = assenza['data_fine'].toString();
+                      children: (assenzeGiustificate ?? []).map((assenza) {
+                        final dataInizio = _dateFormat.format(assenza['data_inizio']);
+                        final dataFine = _dateFormat.format(assenza['data_fine']);
                         return ListTile(
-                          leading: const CircleAvatar(
+                          leading: CircleAvatar(
                             backgroundColor: Colors.green,
                           ),
                           title: Text(
@@ -93,17 +92,8 @@ class _AssenzeState extends State<Assenze> {
                             ),
                           ),
                         );
-                      }).toList() ?? [],
+                      }).toList(),
                     ),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  'Assenze non giustificate:',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -113,9 +103,9 @@ class _AssenzeState extends State<Assenze> {
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      children: assenzeNonGiustificate?.map((assenza) {
-                        final dataInizio = assenza['data_inizio'].toString();
-                        final dataFine = assenza['data_fine'].toString();
+                      children: (assenzeNonGiustificate ?? []).map((assenza) {
+                        final dataInizio = _dateFormat.format(assenza['data_inizio']);
+                        final dataFine = _dateFormat.format(assenza['data_fine']);
                         return ListTile(
                           leading: CircleAvatar(
                             backgroundColor: Colors.red,
@@ -128,7 +118,7 @@ class _AssenzeState extends State<Assenze> {
                             ),
                           ),
                         );
-                      }).toList() ?? [],
+                      }).toList(),
                     ),
                   ),
                 ),

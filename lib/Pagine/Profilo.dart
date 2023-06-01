@@ -184,33 +184,6 @@ class _profiloState extends State<profilo> {
                           ),
                         ),
                         SizedBox(height: 20.h),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10.w),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Notifiche',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Checkbox(
-                                    value: isAttive,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isAttive = value!;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),

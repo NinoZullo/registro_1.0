@@ -5,12 +5,12 @@ class Mysql {
 
   Future<MySqlConnection> getConnection() async {
     var settings = ConnectionSettings(
-        host: "82.52.11.59",
+        host: "sql8.freesqldatabase.com",
         port: 3306,
-        user: "tommaso.cantoni",
-        password: "i^nq@2xSUCqq8a",
-        db: "registro"
-    );
+        user: "sql8622986",
+        password: "ukMUC31KNR",
+        db: "sql8622986"
+        );
 
     return await MySqlConnection.connect(settings);
   }
