@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 2;
   Brightness _currentBrightness = Brightness.light;
   bool _isDarkMode = false;
-  double averageVote = 8.5; // Esempio di media dei voti
 
   void _onItemTapped(int index) {
     setState(() {
@@ -38,9 +37,17 @@ class _HomePageState extends State<HomePage> {
       _currentBrightness = _isDarkMode ? Brightness.dark : Brightness.light;
     });
   }
+  int calculateRemainingDays() {
+    final now = DateTime.now();
+    final targetDate = DateTime(now.year, 6, 8);
+    final difference = targetDate.difference(now);
+    return difference.inDays;
+  }
 
   @override
   Widget build(BuildContext context) {
+    int remainingDays = calculateRemainingDays();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
@@ -175,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                         Padding(
                           padding: EdgeInsets.only(top: 8.h, left: 50.w),
                           child: Text(
-                            "35",
+                            "$remainingDays",
                             style:
                             TextStyle(fontSize: 15.w, color: Colors.black),
                           ),

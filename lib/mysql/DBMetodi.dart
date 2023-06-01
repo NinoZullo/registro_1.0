@@ -1,5 +1,6 @@
 import 'Mysql.dart';
 import 'Utente.dart';
+
 class DBMetodi {
 
   Mysql db = Mysql();
@@ -122,7 +123,7 @@ formato:
         "SELECT nome_evento, descrizione, data_inizio, data_fine, nome_classe "
             "FROM eventi "
             "INNER JOIN classi ON eventi.id_classe = classi.id_classe "
-            "WHERE eenti.id_classe = $idClasse");
+            "WHERE eventi.id_classe = $idClasse");
     await conn.close();
     return results.map((row) => row.fields).toList();
   }

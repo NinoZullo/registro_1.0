@@ -6,6 +6,8 @@ import 'package:registro/mysql/DBMetodi.dart';
 import 'package:registro/mysql/Utente.dart';
 import 'package:intl/intl.dart';
 
+// PAGINA TERMINATA ED OTTIMIZZATA CON ANIMAZIONI ✅
+
 class Assenze extends StatefulWidget {
   const Assenze({Key? key}) : super(key: key);
 
@@ -18,8 +20,9 @@ class _AssenzeState extends State<Assenze> {
   List<Map<String, dynamic>>? assenzeGiustificate;
   List<Map<String, dynamic>>? assenzeNonGiustificate;
   DBMetodi db = DBMetodi();
-  double _headerHeight = 100.h;
+  final double _headerHeight = 100.h;
   final DateFormat _dateFormat = DateFormat('dd-MM-yyyy');
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -28,19 +31,32 @@ class _AssenzeState extends State<Assenze> {
   }
 
   Future<void> fetchData() async {
+    await Future.delayed(const Duration(seconds: 2));
     assenze = await db.getAssenze(idUtente_);
-    assenzeGiustificate = assenze?.where((assenza) => assenza['giustificata'] == 1).toList();
-    assenzeNonGiustificate = assenze?.where((assenza) => assenza['giustificata'] == 0).toList();
-    assenzeGiustificate?.sort((a, b) => a['data_inizio'].compareTo(b['data_inizio']));
-    assenzeNonGiustificate?.sort((a, b) => a['data_inizio'].compareTo(b['data_inizio']));
-    setState(() {});
+    assenzeGiustificate =
+        assenze?.where((assenza) => assenza['giustificata'] == 1).toList();
+    assenzeNonGiustificate =
+        assenze?.where((assenza) => assenza['giustificata'] == 0).toList();
+    assenzeGiustificate
+        ?.sort((a, b) => a['data_inizio'].compareTo(b['data_inizio']));
+    assenzeNonGiustificate
+        ?.sort((a, b) => a['data_inizio'].compareTo(b['data_inizio']));
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Assenze"),
+        title: Text(
+          "Assenze",
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 15.sp),
+        ),
         centerTitle: true,
       ),
       body: Column(
@@ -63,68 +79,79 @@ class _AssenzeState extends State<Assenze> {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Text("$nome_ $cognome_", style: TextStyle(color: Colors.black , fontSize: 18.sp),),
+                Text(
+                  "$nome_ $cognome_",
+                  style: TextStyle(color: Colors.black, fontSize: 18.sp),
+                ),
               ],
             ),
           ),
           SizedBox(height: 20.h),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  constraints: BoxConstraints(
-                    maxHeight: 265.h,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: (assenzeGiustificate ?? []).map((assenza) {
-                        final dataInizio = _dateFormat.format(assenza['data_inizio']);
-                        final dataFine = _dateFormat.format(assenza['data_fine']);
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.green,
+          _isLoading
+              ? const CircularProgressIndicator()
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(
+                          maxHeight: 265.h,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children:
+                                (assenzeGiustificate ?? []).map((assenza) {
+                              final dataInizio =
+                                  _dateFormat.format(assenza['data_inizio']);
+                              final dataFine =
+                                  _dateFormat.format(assenza['data_fine']);
+                              return ListTile(
+                                leading: const CircleAvatar(
+                                  backgroundColor: Colors.green,
+                                ),
+                                title: Text(
+                                  '$dataInizio - $dataFine',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          title: Text(
-                            '$dataInizio - $dataFine',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.black,
-                            ),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Container(
+                        constraints: BoxConstraints(
+                          maxHeight: 265.h,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children:
+                                (assenzeNonGiustificate ?? []).map((assenza) {
+                              final dataInizio =
+                                  _dateFormat.format(assenza['data_inizio']);
+                              final dataFine =
+                                  _dateFormat.format(assenza['data_fine']);
+                              return ListTile(
+                                leading: const CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                ),
+                                title: Text(
+                                  '$dataInizio - $dataFine',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        );
-                      }).toList(),
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 8.h),
-                Container(
-                  constraints: BoxConstraints(
-                    maxHeight: 265.h,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: (assenzeNonGiustificate ?? []).map((assenza) {
-                        final dataInizio = _dateFormat.format(assenza['data_inizio']);
-                        final dataFine = _dateFormat.format(assenza['data_fine']);
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.red,
-                          ),
-                          title: Text(
-                            '$dataInizio - $dataFine',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.black,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

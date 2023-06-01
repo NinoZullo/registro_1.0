@@ -5,6 +5,8 @@ import 'package:registro/Palette/Palette.dart';
 import 'package:registro/mysql/DBMetodi.dart';
 import 'package:registro/mysql/Utente.dart';
 
+// PAGINA TERMINATA ED OTTIMIZZATA CON ANIMAZIONI ✅
+
 class Annotazioni extends StatefulWidget {
   const Annotazioni({Key? key}) : super(key: key);
 
@@ -15,7 +17,8 @@ class Annotazioni extends StatefulWidget {
 class _AnnotazioniState extends State<Annotazioni> {
   List<Map<String, dynamic>> annotazioni = [];
   DBMetodi db = DBMetodi();
-  double _headerHeight = 100.h;
+  final double _headerHeight = 100.h;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -27,11 +30,12 @@ class _AnnotazioniState extends State<Annotazioni> {
     final fetchedAnnotazioni = await db.getAnnotazioni(idUtente_);
     setState(() {
       annotazioni = fetchedAnnotazioni ?? [];
+      isLoading = false;
     });
   }
 
-  Color getColorForType(String type) {
-    switch (type) {
+  Color getColorForType(String tipo) {
+    switch (tipo) {
       case '+':
         return Colors.green;
       case '-':
@@ -57,6 +61,76 @@ class _AnnotazioniState extends State<Annotazioni> {
       default:
         return Colors.grey;
     }
+  }
+
+  Widget buildLoadingIndicator() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget buildAnnotazioniList() {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Annotazioni:',
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Expanded(
+              child: ListView.builder(
+                itemCount: annotazioni.length,
+                itemBuilder: (context, index) {
+                  final annotazione = annotazioni[index];
+                  final tipoIcona = annotazione['nome_corto'] as String;
+                  final descrizione = annotazione['descrizione'] as String;
+                  final nomeDocente = annotazione['nome'] as String;
+                  final cognomeDocente = annotazione['cognome'] as String;
+                  final nomeMateria = annotazione['nome_materia'] as String;
+                  final colore = getColorForType(tipoIcona);
+
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: colore,
+                      child: Text(
+                        tipoIcona,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                          fontWeight:FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      descrizione,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.black,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '$nomeDocente $cognomeDocente - $nomeMateria',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -107,66 +181,7 @@ class _AnnotazioniState extends State<Annotazioni> {
             ),
           ),
           SizedBox(height: 16.h),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Annotazioni:',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: annotazioni.length,
-                      itemBuilder: (context, index) {
-                        final annotazione = annotazioni[index];
-                        final iconType = annotazione['nome_corto'] as String;
-                        final description = annotazione['descrizione'] as String;
-                        final date = annotazione['data_inserimento'] as DateTime;
-                        final teacherName = annotazione['nome'] as String;
-                        final teacherSurname = annotazione['cognome'] as String;
-                        final subjectName = annotazione['nome_materia'] as String;
-                        final color = getColorForType(iconType);
-
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: color,
-                            child: Text(
-                              iconType,
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            description,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              color: Colors.black,
-                            ),
-                          ),
-                          subtitle: Text(
-                            '$teacherName $teacherSurname - $subjectName',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          isLoading ? buildLoadingIndicator() : buildAnnotazioniList(),
         ],
       ),
     );

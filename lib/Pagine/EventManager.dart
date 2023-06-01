@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:registro/Pagine/Eventi.dart';
 
@@ -42,5 +41,9 @@ class EventiManager {
     final jsonString = json.encode(jsonMap);
 
     await file.writeAsString(jsonString);
+  }
+
+  Future<List<Map<String, dynamic>>?> getEventi(int idClasse) async {
+    // ... codice per ottenere gli eventi dal database ...
   }
 }

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:registro/Pagine/InfoVoto.dart';
-import 'package:registro/metodi/Metodi.dart';
 import 'package:registro/mysql/DBMetodi.dart';
 import 'package:registro/mysql/Utente.dart';
+
+// PAGINA TERMINATA ED OTTIMIZZATA CON ANIMAZIONI ✅
 
 class Voti extends StatefulWidget {
   const Voti({Key? key}) : super(key: key);
@@ -16,17 +17,26 @@ class Voti extends StatefulWidget {
 class _VotiState extends State<Voti> {
   List<Map<String, dynamic>>? voti;
   DBMetodi db = DBMetodi();
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    db.getVoti().then((value) {
-      setState(() {
-        voti = value;
-        print(voti);
-      });
+    fetchVoti();
+  }
+
+  Future<void> fetchVoti() async {
+    setState(() {
+      isLoading = true;
+    });
+    final fetchedVoti = await db.getVoti();
+    setState(() {
+      voti = fetchedVoti;
+      voti?.sort((b, a) => a['data_inserimento'].compareTo(b['data_inserimento']));
+      isLoading = false;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +54,15 @@ class _VotiState extends State<Voti> {
       body: Column(
         children: [
           SizedBox(height: 20.h),
-          Text("$nome_ $cognome_", style: TextStyle(fontSize: 20.sp , fontWeight: FontWeight.bold , color: Colors.black),),
+          Text(
+            "$nome_ $cognome_",
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
           SizedBox(height: 30.h),
           Expanded(
-            child: ListView.builder(
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
               itemCount: voti?.length ?? 0,
               itemBuilder: (context, index) {
                 final voto = voti![index];
@@ -64,8 +79,7 @@ class _VotiState extends State<Voti> {
                   dotColor = Colors.red;
                 } else if (votoDouble >= 6 && votoDouble < 9) {
                   dotColor = Colors.green;
-
-                } else if(votoDouble >=9){
+                } else if (votoDouble >= 9) {
                   dotColor = Colors.blue;
                 } else {
                   dotColor = Colors.orange;
@@ -117,7 +131,7 @@ class _VotiState extends State<Voti> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "$materia",
+                              materia,
                               style: TextStyle(
                                 fontSize: 16.w,
                                 fontWeight: FontWeight.bold,
