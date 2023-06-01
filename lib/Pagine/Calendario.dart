@@ -216,7 +216,7 @@ class _CalendarioState extends State<Calendario> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const profilo(),
+                  builder: (context) => const Profilo(),
                 ),
               );
               break;

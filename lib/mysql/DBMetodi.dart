@@ -97,13 +97,13 @@ formato:
 - int id_studente 
 - id_assegnazione 
  */
-  void addVoto(double voto, String tipo, String data_inserimento,
-      int id_studente, int id_assegnazione) async {
+  void addVoto(double voto, String tipo, String dataInserimento,
+      int idStudente, int idAssegnazione) async {
     var db = Mysql();
     final conn = await db.getConnection();
     await conn.query(
         "INSERT INTO voti (voto, tipo, data_inserimento, id_studente, id_assegnazione)"
-            "VALUES ($voto, '$tipo', '$data_inserimento', $id_studente, $id_assegnazione);"
+            "VALUES ($voto, '$tipo', '$dataInserimento', $idStudente, $idAssegnazione);"
     );
     await conn.close();
   }
@@ -259,8 +259,6 @@ _ String nome_materia
 - Time ora_fine, giorno
 - String giorno
 */
-
-
   Future<List<Map<String, dynamic>>?> getOreDocenti() async {
     var db = Mysql();
     final conn = await db.getConnection();

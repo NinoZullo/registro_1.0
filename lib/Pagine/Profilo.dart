@@ -8,16 +8,14 @@ import 'package:registro/Pagine/Widget/HeaderHeight.dart';
 import 'package:registro/mysql/Utente.dart';
 import 'package:intl/intl.dart';
 
-class profilo extends StatefulWidget {
-  const profilo({Key? key}) : super(key: key);
+class Profilo extends StatefulWidget {
+  const Profilo({Key? key}) : super(key: key);
 
   @override
-  State<profilo> createState() => _profiloState();
+  State<Profilo> createState() => _ProfiloState();
 }
 
-int _selectedIndex = 2;
-
-class _profiloState extends State<profilo> {
+class _ProfiloState extends State<Profilo> {
   int calcolaEta(DateTime dataDiNascita) {
     DateTime dataCorrente = DateTime.now();
     int eta = dataCorrente.year - dataDiNascita.year;
@@ -29,19 +27,11 @@ class _profiloState extends State<profilo> {
     return eta;
   }
 
-  void _toggleTheme() {
-    setState(() {
-      isDarkMode = !isDarkMode;
-    });
-  }
-
-  double _headerHeight = 100.h;
-  EdgeInsetsGeometry _rowPadding =
-      EdgeInsets.only(top: 30.h, left: 15.h, right: 10.h);
-  int _currentIndex = 2;
-  bool isAttive = false;
-  bool isChecked = false;
-  bool isDarkMode = false;
+  final double _headerHeight = 100.h;
+   int _currentIndex = 2;
+  final bool isAttive = false;
+  final bool isChecked = false;
+  final bool isDarkMode = false;
 
   Widget customButton(
     BuildContext context,
@@ -80,7 +70,7 @@ class _profiloState extends State<profilo> {
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [0.0, 1.0],
+                    stops: const [0.0, 1.0],
                     tileMode: TileMode.clamp,
                   ),
                 ),
@@ -107,7 +97,7 @@ class _profiloState extends State<profilo> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: _headerHeight,
               child: HeaderWidget(_headerHeight),
             ),
@@ -147,9 +137,9 @@ class _profiloState extends State<profilo> {
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     child: Column(
                       children: [
-                        Prof("Nome", "$nome_"),
+                        Prof("Nome", nome_),
                         SizedBox(height: 20.h),
-                        Prof("Cognome", "$cognome_"),
+                        Prof("Cognome", cognome_),
                         SizedBox(height: 20.h),
                         Prof("Classe", "$classe_"),
                         SizedBox(height: 20.h),
@@ -228,12 +218,11 @@ class _profiloState extends State<profilo> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(),
+                    builder: (context) => const HomePage(),
                   ),
                 );
                 break;
             }
-
           });
         },
         selectedItemColor: blu1,
