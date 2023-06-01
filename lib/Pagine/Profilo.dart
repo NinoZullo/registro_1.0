@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:registro/Pagine/Calendario.dart';
 import 'package:registro/Pagine/HomePage.dart';
-import 'package:registro/Pagine/PCTO.dart';
-import 'package:registro/Pagine/menu.dart';
 import 'package:registro/Palette/Palette.dart';
 import 'package:registro/metodi/Metodi.dart';
 import 'package:registro/Pagine/Widget/HeaderHeight.dart';
@@ -17,15 +15,18 @@ class profilo extends StatefulWidget {
   State<profilo> createState() => _profiloState();
 }
 
+int _selectedIndex = 2;
+
 class _profiloState extends State<profilo> {
   int calcolaEta(DateTime dataDiNascita) {
-  DateTime dataCorrente = DateTime.now();
-  int eta = dataCorrente.year - dataDiNascita.year;
-  if (dataCorrente.month < dataDiNascita.month ||
-  (dataCorrente.month == dataDiNascita.month && dataCorrente.day < dataDiNascita.day)) {
-  eta--;
-  }
-  return eta;
+    DateTime dataCorrente = DateTime.now();
+    int eta = dataCorrente.year - dataDiNascita.year;
+    if (dataCorrente.month < dataDiNascita.month ||
+        (dataCorrente.month == dataDiNascita.month &&
+            dataCorrente.day < dataDiNascita.day)) {
+      eta--;
+    }
+    return eta;
   }
 
   void _toggleTheme() {
@@ -152,9 +153,10 @@ class _profiloState extends State<profilo> {
                         SizedBox(height: 20.h),
                         Prof("Classe", "$classe_"),
                         SizedBox(height: 20.h),
-                      Prof("Età", calcolaEta(dataDiNascita_!).toString()),
+                        Prof("Età", calcolaEta(dataDiNascita_!).toString()),
                         Padding(
-                          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 20.h),
+                          padding: EdgeInsets.only(
+                              left: 10.w, right: 10.w, top: 20.h),
                           child: Column(
                             children: [
                               Row(
@@ -170,7 +172,8 @@ class _profiloState extends State<profilo> {
                                     child: Align(
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        DateFormat('dd/MM/yyyy').format(dataDiNascita_!),
+                                        DateFormat('dd/MM/yyyy')
+                                            .format(dataDiNascita_!),
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18.sp,
@@ -194,52 +197,44 @@ class _profiloState extends State<profilo> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 4,
-        items: [
-          It("Calendario", Icons.calendar_month),
-          It("Menù", Icons.menu),
-          It("Home", Icons.home),
-          It("PCTO", Icons.engineering),
-          It("Profilo", Icons.person),
+        currentIndex: _currentIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Calendario',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profilo',
+          ),
         ],
-        onTap: (currentIndex) {
+        onTap: (index) {
           setState(() {
-            _currentIndex = currentIndex;
+            _currentIndex = index;
+            switch (index) {
+              case 0:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Calendario(),
+                  ),
+                );
+                break;
+              case 1:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+                break;
+            }
+
           });
-          switch (currentIndex) {
-            case 0:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Calendario(),
-                ),
-              );
-              break;
-            case 1:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => menu(),
-                ),
-              );
-              break;
-            case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ),
-              );
-              break;
-            case 3:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PCTO(),
-                ),
-              );
-              break;
-          }
         },
         selectedItemColor: blu1,
         unselectedItemColor: Colors.grey,

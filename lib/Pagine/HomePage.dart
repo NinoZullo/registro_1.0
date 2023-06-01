@@ -1,42 +1,38 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:registro/Pagine/Annotazioni.dart';
-import 'package:registro/Pagine/Argomenti.dart';
-import 'package:registro/Pagine/Assenze.dart';
-import 'package:registro/Pagine/Calendario.dart';
-import 'package:registro/Pagine/Compiti.dart';
-import 'package:registro/Pagine/NoteDisciplinari.dart';
-import 'package:registro/Pagine/PCTO.dart';
-import 'package:registro/Pagine/Profilo.dart';
-import 'package:registro/Pagine/Voti.dart';
-import 'package:registro/Pagine/menu.dart';
-import 'package:registro/metodi/Metodi.dart';
-import 'package:registro/Pagine/PaginaLogin.dart';
-import 'package:registro/mysql/Utente.dart';
-import 'package:day_night_switcher/day_night_switcher.dart';
+import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:registro/Pagine/Annotazioni.dart";
+import "package:registro/Pagine/Argomenti.dart";
+import "package:registro/Pagine/Assenze.dart";
+import "package:registro/Pagine/Calendario.dart";
+import "package:registro/Pagine/Compiti.dart";
+import "package:registro/Pagine/NoteDisciplinari.dart";
+import "package:registro/Pagine/Profilo.dart";
+import "package:registro/Pagine/Voti.dart";
+import "package:registro/metodi/Metodi.dart";
+import "package:registro/Pagine/PaginaLogin.dart";
+import "package:registro/mysql/Utente.dart";
+import "package:day_night_switcher/day_night_switcher.dart";
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 2;
-  Brightness _currentBrightness = Brightness.light;
+  final int _selectedIndex = 1;
   bool _isDarkMode = false;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  
 
   void _toggleTheme() {
     setState(() {
-      _currentBrightness = _isDarkMode ? Brightness.dark : Brightness.light;
     });
   }
+  
   int calculateRemainingDays() {
     final now = DateTime.now();
     final targetDate = DateTime(now.year, 6, 8);
@@ -50,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: Text("Home Page" , style: GoogleFonts.roboto(color: Colors.white, fontSize: 18.sp , fontWeight: FontWeight.bold)),
         actions: [
           DayNightSwitcher(
             isDarkModeEnabled: _isDarkMode,
@@ -62,12 +58,12 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.exit_to_app),
+            icon: const Icon(Icons.exit_to_app),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PaginaLogin(),
+                  builder: (context) =>const PaginaLogin(),
                 ),
               );
             },
@@ -202,60 +198,60 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Voti()),
+                        MaterialPageRoute(builder: (context) => const Voti()),
                       );
                     },
-                    child: Cont1(Colors.red, Icons.auto_graph, "Voti"),
+                    child: const Cont1(Colors.red, Icons.auto_graph, "Voti"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Assenze()),
+                        MaterialPageRoute(builder: (context) => const Assenze()),
                       );
                     },
-                    child: Cont1(Colors.orange, Icons.no_accounts_sharp, "Assenze"),
+                    child: const Cont1(Colors.orange, Icons.no_accounts_sharp, "Assenze"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Compiti()),
+                        MaterialPageRoute(builder: (context) => const Compiti()),
                       );
                     },
-                    child: Cont1(Colors.yellow, Icons.person_2_outlined, "Compiti"),
+                    child: const Cont1(Colors.yellow, Icons.person_2_outlined, "Compiti"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NoteDisciplinari()),
+                        MaterialPageRoute(builder: (context) => const NoteDisciplinari()),
                       );
                     },
-                    child: Cont1(Colors.green, Icons.beenhere_sharp, "Note"),
+                    child: const Cont1(Colors.green, Icons.beenhere_sharp, "Note"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Argomenti()),
+                        MaterialPageRoute(builder: (context) => const Argomenti()),
                       );
                     },
-                    child: Cont1(Colors.blue, Icons.edit, "Argomenti"),
+                    child: const Cont1(Colors.blue, Icons.edit, "Argomenti"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Annotazioni()),
+                        MaterialPageRoute(builder: (context) => const Annotazioni()),
                       );
                     },
-                    child: Cont1(Colors.purple, Icons.account_balance, "Annotaz."),
+                    child: const Cont1(Colors.purple, Icons.account_balance, "Annotaz."),
                   ),
                   SizedBox(width: 10.w),
                 ],
@@ -268,11 +264,11 @@ class _HomePageState extends State<HomePage> {
                 shrinkWrap: true,
                 children: [
                   Cont2("Verifica di Italiano"),
-                  SizedBox(height: 5),
+                  SizedBox(height: 5.h),
                   Cont2("Verifica di matematica"),
-                  SizedBox(height: 5),
+                  SizedBox(height: 5.h),
                   Cont2("Uscita didattica"),
-                  SizedBox(height: 5),
+                  SizedBox(height: 5.h),
                   Cont2("Verifica di sistemi"),
                 ],
               ),
@@ -284,9 +280,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         items: [
           It("Calendario", Icons.calendar_month),
-          It("Menù", Icons.menu),
           It("Home", Icons.home),
-          It("PCTO", Icons.engineering),
           It("Profilo", Icons.person),
         ],
         onTap: (currentIndex) {
@@ -299,29 +293,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
               break;
-            case 1:
+              case 2:
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => menu(),
-                ),
-              );
-              break;
-            case 2:
-              break;
-            case 3:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PCTO(),
-                ),
-              );
-              break;
-            case 4:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => profilo(),
+                  builder: (context) => const profilo(),
                 ),
               );
               break;
@@ -339,7 +315,7 @@ class Cont1 extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const Cont1(this.color, this.icon, this.text);
+  const Cont1(this.color, this.icon, this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -2,9 +2,8 @@ import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:intl/intl.dart";
 import "package:registro/Pagine/HomePage.dart";
-import "package:registro/Pagine/PCTO.dart";
 import "package:registro/Pagine/Profilo.dart";
-import "package:registro/Pagine/menu.dart";
+import "package:registro/metodi/Metodi.dart";
 import "package:registro/mysql/DBMetodi.dart";
 import "package:registro/mysql/Utente.dart";
 import "package:table_calendar/table_calendar.dart";
@@ -56,7 +55,13 @@ class _CalendarioState extends State<Calendario> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Calendario", style: TextStyle(color: Colors.white, fontSize: 19.sp ,),),
+        title: Text(
+          "Calendario",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 19.sp,
+          ),
+        ),
         centerTitle: false,
       ),
       body: Column(
@@ -116,7 +121,7 @@ class _CalendarioState extends State<Calendario> {
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(5.0.r),
               ),
-              formatButtonTextStyle:  GoogleFonts.roboto(
+              formatButtonTextStyle: GoogleFonts.roboto(
                 color: Colors.black,
               ),
               titleTextStyle: TextStyle(
@@ -130,85 +135,72 @@ class _CalendarioState extends State<Calendario> {
           Expanded(
             child: eventi.isEmpty
                 ? const Center(
-              child: CircularProgressIndicator(),
-            )
+                    child: CircularProgressIndicator(),
+                  )
                 : ListView.builder(
-              itemCount: eventi.length,
-              itemBuilder: (context, index) {
-                final evento = eventi[index];
-                final titolo = evento["nome_evento"] as String;
-                final descrizione = evento["descrizione"] as String;
-                final dataInizio = evento["data_inizio"] as DateTime;
-                final nomeClasse = evento["nome_classe"] as String;
+                    itemCount: eventi.length,
+                    itemBuilder: (context, index) {
+                      final evento = eventi[index];
+                      final titolo = evento["nome_evento"] as String;
+                      final descrizione = evento["descrizione"] as String;
+                      final dataInizio = evento["data_inizio"] as DateTime;
+                      final nomeClasse = evento["nome_classe"] as String;
 
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10.0.w, horizontal: 20.0.h),
-                  padding: EdgeInsets.all(15.0.w),
-                  decoration: BoxDecoration(
-                    color: Colors.lightBlue,
-                    borderRadius: BorderRadius.circular(10.0.r),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        titolo,
-                        style:  GoogleFonts.roboto(
-                          fontSize: 18.0.sp,
-                          fontWeight: FontWeight.bold,
+                      return Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0.w, horizontal: 20.0.h),
+                        padding: EdgeInsets.all(15.0.w),
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue,
+                          borderRadius: BorderRadius.circular(10.0.r),
                         ),
-                      ),
-                      SizedBox(height: 5.0.h),
-                      Text(
-                        descrizione,
-                        style: GoogleFonts.roboto(fontSize: 16.0.sp, color: Colors.black),
-                      ),
-                      SizedBox(height: 10.0.h),
-                      Row(
-                        children: [
-                          Text(
-                            "Giorno: ${DateFormat("hh-dd-MM-yyyy").format(dataInizio)}",
-                            style: GoogleFonts.roboto(fontSize: 16.0.sp, color: Colors.black),
-                          ),
-                          SizedBox(width: 10.0.w),
-                        ],
-                      ),
-                      SizedBox(height: 5.0.h),
-                      Text(
-                        "Nome classe: $nomeClasse",
-                        style: GoogleFonts.roboto(fontSize: 16.0.sp, color: Colors.black),
-                      ),
-                    ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              titolo,
+                              style: GoogleFonts.roboto(
+                                fontSize: 18.0.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 5.0.h),
+                            Text(
+                              descrizione,
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16.0.sp, color: Colors.black),
+                            ),
+                            SizedBox(height: 10.0.h),
+                            Row(
+                              children: [
+                                Text(
+                                  "Giorno: ${DateFormat("hh-dd-MM-yyyy").format(dataInizio)}",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 16.0.sp, color: Colors.black),
+                                ),
+                                SizedBox(width: 10.0.w),
+                              ],
+                            ),
+                            SizedBox(height: 5.0.h),
+                            Text(
+                              "Nome classe: $nomeClasse",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16.0.sp, color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: "Calendario",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: "Menù",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.engineering),
-            label: "PCTO",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profilo",
-          ),
+        items: [
+          It("Calendario", Icons.calendar_month),
+          It("Home", Icons.home),
+          It("Profilo", Icons.person),
         ],
         onTap: (currentIndex) {
           switch (currentIndex) {
@@ -216,7 +208,7 @@ class _CalendarioState extends State<Calendario> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const menu(),
+                  builder: (context) => const HomePage(),
                 ),
               );
               break;
@@ -224,23 +216,7 @@ class _CalendarioState extends State<Calendario> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              );
-              break;
-            case 3:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>const PCTO(),
-                ),
-              );
-              break;
-            case 4:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>const profilo(),
+                  builder: (context) => const profilo(),
                 ),
               );
               break;
