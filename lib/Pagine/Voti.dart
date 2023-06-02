@@ -4,8 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:registro/Pagine/InfoVoto.dart';
 import 'package:registro/mysql/DBMetodi.dart';
 import 'package:registro/mysql/Utente.dart';
-
-// PAGINA TERMINATA ED OTTIMIZZATA CON ANIMAZIONI ✅
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Voti extends StatefulWidget {
   const Voti({Key? key}) : super(key: key);
@@ -14,16 +13,39 @@ class Voti extends StatefulWidget {
   State<Voti> createState() => _VotiState();
 }
 
-class _VotiState extends State<Voti> {
+double? media;
+
+class _VotiState extends State<Voti> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>>? voti;
   DBMetodi db = DBMetodi();
   bool isLoading = true;
+  late AnimationController _controller;
+
 
   @override
   void initState() {
     super.initState();
-    fetchVoti();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    // Verifica se la lista dei voti è già stata caricata
+    if (voti == null) {
+      fetchVoti();
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
+
 
   Future<void> fetchVoti() async {
     setState(() {
@@ -33,10 +55,68 @@ class _VotiState extends State<Voti> {
     setState(() {
       voti = fetchedVoti;
       voti?.sort((b, a) => a['data_inserimento'].compareTo(b['data_inserimento']));
+      media = calcolaMedia(voti);
       isLoading = false;
     });
   }
 
+
+  double calcolaMedia(List<Map<String, dynamic>>? voti) {
+    if (voti == null || voti.isEmpty) return 0.0;
+
+    double somma = 0.0;
+    for (final voto in voti) {
+      final votoDouble = double.tryParse(voto['voto'].toString()) ?? 0.0;
+      somma += votoDouble;
+    }
+    return somma / voti.length;
+  }
+
+
+  Widget buildCircularChart() {
+    if (isLoading) {
+      return CircularProgressIndicator();
+    } else {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        child: CircularPercentIndicator(
+          radius: 50.0.r,
+          lineWidth: 13.0.w,
+          percent: media! / 10.0,
+          center: Text(
+            media!.toStringAsFixed(2),
+            style: TextStyle(
+              fontSize: 24.0.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          circularStrokeCap: CircularStrokeCap.round,
+          progressColor: getProgressColor(),
+          backgroundColor: Colors.grey.shade300,
+        ),
+      );
+    }
+  }
+
+
+  Color getProgressColor() {
+    if (media! < 5) {
+      return Colors.red;
+    } else if (media! < 6) {
+      return Colors.yellow;
+    } else if (media! < 9) {
+      return Colors.green;
+    } else {
+      return Colors.blue;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +132,16 @@ class _VotiState extends State<Voti> {
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20.h),
-          Text(
-            "$nome_ $cognome_",
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: Colors.black),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            child: Text(
+              "$nome_ $cognome_",
+              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
           ),
-          SizedBox(height: 30.h),
+          buildCircularChart(),
           Expanded(
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())

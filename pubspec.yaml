@@ -42,14 +42,14 @@ dependencies:
   flutter_local_notifications: ^14.1.0
   permission_handler: ^10.2.0
   day_night_switcher: 0.2.0+1
-
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flare_flutter: ^3.0.0
   table_calendar: ^3.0.9
-
+  fl_chart: ^0.62.0
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
