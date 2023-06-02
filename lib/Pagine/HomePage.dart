@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:intl/intl.dart";
 import "package:registro/Pagine/Annotazioni.dart";
 import "package:registro/Pagine/Argomenti.dart";
 import "package:registro/Pagine/Assenze.dart";
@@ -11,6 +12,7 @@ import "package:registro/Pagine/Profilo.dart";
 import "package:registro/Pagine/Voti.dart";
 import "package:registro/metodi/Metodi.dart";
 import "package:registro/Pagine/PaginaLogin.dart";
+import "package:registro/mysql/DBMetodi.dart";
 import "package:registro/mysql/Utente.dart";
 import "package:day_night_switcher/day_night_switcher.dart";
 
@@ -26,11 +28,8 @@ class _HomePageState extends State<HomePage> {
   final int _selectedIndex = 1;
   bool _isDarkMode = false;
 
-
-
   void _toggleTheme() {
-    setState(() {
-    });
+    setState(() {});
   }
 
   int calculateRemainingDays() {
@@ -39,6 +38,21 @@ class _HomePageState extends State<HomePage> {
     final difference = targetDate.difference(now);
     return difference.inDays;
   }
+  @override
+  void initState() {
+    super.initState();
+    fetchEventi();
+  }
+
+  DBMetodi db = DBMetodi();
+  List<Map<String, dynamic>> eventi = [];
+
+  Future<void> fetchEventi() async {
+    final fetchedEventi = await db.getEventi(idClasse_!);
+    setState(() {
+      eventi = fetchedEventi ?? [];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +60,11 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Page" , style: GoogleFonts.roboto(color: Colors.white, fontSize: 18.sp , fontWeight: FontWeight.bold)),
+        title: Text("Home Page",
+            style: GoogleFonts.roboto(
+                color: Colors.white,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold)),
         actions: [
           DayNightSwitcher(
             isDarkModeEnabled: _isDarkMode,
@@ -63,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>const PaginaLogin(),
+                  builder: (context) => const PaginaLogin(),
                 ),
               );
             },
@@ -84,14 +102,15 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       "$nome_ $cognome_",
-                      style: TextStyle(
+                      style: GoogleFonts.roboto(
                           fontSize: 20.w,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       "Studente",
-                      style: TextStyle(fontSize: 16.w, color: Colors.black),
+                      style: GoogleFonts.roboto(
+                          fontSize: 16.w, color: Colors.black),
                     ),
                   ],
                 ),
@@ -109,20 +128,21 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Padding(
                     padding:
-                    EdgeInsets.only(left: 10.w, top: 10.w, bottom: 5.h),
+                        EdgeInsets.only(left: 10.w, top: 10.w, bottom: 5.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Assenze",
-                          style: TextStyle(fontSize: 15.w, color: Colors.black),
+                          style: GoogleFonts.roboto(
+                              fontSize: 15.w, color: Colors.black),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 8.h, left: 25.w),
                           child: Text(
                             "0",
-                            style:
-                            TextStyle(fontSize: 15.w, color: Colors.black),
+                            style: GoogleFonts.roboto(
+                                fontSize: 15.w, color: Colors.black),
                           ),
                         ),
                       ],
@@ -138,20 +158,21 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding:
-                    EdgeInsets.only(left: 25.w, top: 10.w, bottom: 5.h),
+                        EdgeInsets.only(left: 25.w, top: 10.w, bottom: 5.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Ore PCTO",
-                          style: TextStyle(fontSize: 15.w, color: Colors.black),
+                          style: GoogleFonts.roboto(
+                              fontSize: 15.w, color: Colors.black),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 8.h, left: 23.w),
                           child: Text(
-                            "12",
-                            style:
-                            TextStyle(fontSize: 15.w, color: Colors.black),
+                            "3",
+                            style: GoogleFonts.roboto(
+                                fontSize: 15.w, color: Colors.black),
                           ),
                         ),
                       ],
@@ -167,20 +188,21 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding:
-                    EdgeInsets.only(left: 10.w, top: 10.w, bottom: 5.h),
+                        EdgeInsets.only(left: 10.w, top: 10.w, bottom: 5.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Giorni rimanenti",
-                          style: TextStyle(fontSize: 14.w, color: Colors.black),
+                          style: GoogleFonts.roboto(
+                              fontSize: 14.w, color: Colors.black),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 8.h, left: 50.w),
                           child: Text(
                             "$remainingDays",
-                            style:
-                            TextStyle(fontSize: 15.w, color: Colors.black),
+                            style: GoogleFonts.roboto(
+                                fontSize: 15.w, color: Colors.black),
                           ),
                         )
                       ],
@@ -208,37 +230,44 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Assenze()),
+                        MaterialPageRoute(
+                            builder: (context) => const Assenze()),
                       );
                     },
-                    child: const Cont1(Colors.orange, Icons.no_accounts_sharp, "Assenze"),
+                    child: const Cont1(
+                        Colors.orange, Icons.no_accounts_sharp, "Assenze"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Compiti()),
+                        MaterialPageRoute(
+                            builder: (context) => const Compiti()),
                       );
                     },
-                    child: const Cont1(Colors.yellow, Icons.person_2_outlined, "Compiti"),
+                    child: const Cont1(
+                        Colors.yellow, Icons.person_2_outlined, "Compiti"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const NoteDisciplinari()),
+                        MaterialPageRoute(
+                            builder: (context) => const NoteDisciplinari()),
                       );
                     },
-                    child: const Cont1(Colors.green, Icons.beenhere_sharp, "Note"),
+                    child:
+                        const Cont1(Colors.green, Icons.beenhere_sharp, "Note"),
                   ),
                   SizedBox(width: 10.w),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Argomenti()),
+                        MaterialPageRoute(
+                            builder: (context) => const Argomenti()),
                       );
                     },
                     child: const Cont1(Colors.blue, Icons.edit, "Argomenti"),
@@ -248,10 +277,12 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Annotazioni()),
+                        MaterialPageRoute(
+                            builder: (context) => const Annotazioni()),
                       );
                     },
-                    child: const Cont1(Colors.purple, Icons.account_balance, "Annotaz."),
+                    child: const Cont1(
+                        Colors.purple, Icons.account_balance, "Annotaz."),
                   ),
                   SizedBox(width: 10.w),
                 ],
@@ -259,19 +290,53 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 20.h),
             Expanded(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                children: [
-                  Cont2("Verifica di Italiano"),
-                  SizedBox(height: 5.h),
-                  Cont2("Verifica di matematica"),
-                  SizedBox(height: 5.h),
-                  Cont2("Uscita didattica"),
-                  SizedBox(height: 5.h),
-                  Cont2("Verifica di sistemi"),
-                ],
-              ),
+              child: ListView.builder(
+                  itemCount: eventi.length,
+                  itemBuilder: (context, index) {
+                    final evento = eventi[index];
+                    final titolo = evento["nome_evento"] as String;
+                    final dataInizio = evento["data_inizio"] as DateTime;
+                    final nomeClasse = evento["nome_classe"] as String;
+                    return Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: 10.0.w, horizontal: 10.0.h),
+                      padding: EdgeInsets.all(15.0.w),
+                      decoration: BoxDecoration(
+                        color: Colors.lightBlue,
+                        borderRadius: BorderRadius.circular(10.0.r),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            titolo,
+                            style: GoogleFonts.roboto(
+                              fontSize: 18.0.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10.0.h),
+                          Row(
+                            children: [
+                              Text(
+                                "Giorno: ${DateFormat("hh dd-MM-yyyy").format(dataInizio)}",
+                                style: GoogleFonts.roboto(
+                                    fontSize: 16.0.sp, color: Colors.black),
+                              ),
+                              SizedBox(width: 10.0.w),
+                            ],
+                          ),
+                          SizedBox(height: 5.0.h),
+                          Text(
+                            "Nome classe: $nomeClasse",
+                            style: GoogleFonts.roboto(
+                                fontSize: 16.0.sp, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    );
+
+                  }),
             ),
           ],
         ),
@@ -333,7 +398,7 @@ class Cont1 extends StatelessWidget {
           SizedBox(height: 10.h),
           Text(
             text,
-            style: TextStyle(fontSize: 14.w, color: Colors.black),
+            style: GoogleFonts.roboto(fontSize: 14.w, color: Colors.black),
           ),
         ],
       ),

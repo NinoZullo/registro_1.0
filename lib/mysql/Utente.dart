@@ -11,4 +11,3 @@ late String cognome_;
 late DateTime? dataDiNascita_;
 late int? idClasse_;
 late String? classe_;
-late int? orePCTO_;

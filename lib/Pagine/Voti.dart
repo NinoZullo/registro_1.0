@@ -154,7 +154,6 @@ class _VotiState extends State<Voti> with SingleTickerProviderStateMixin {
                 final votoString = voto['voto'].toString();
                 final dataString = voto['data_inserimento'].toString();
                 final materia = voto['nome_materia'].toString();
-
                 final votoDouble = double.tryParse(votoString) ?? 0.0;
                 final data = DateTime.tryParse(dataString) ?? DateTime.now();
                 final formattedDate = "${data.day}-${data.month}-${data.year}";

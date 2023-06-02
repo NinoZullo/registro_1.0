@@ -71,7 +71,7 @@ class DBMetodi {
 /*
 formato:
 - int voto,
-- String tipo = ("P", "O", "S")
+- String tipo ("Pratico", "Orale", "Scritto")
 - String descrizione
 - DateTime data (yyyy-mm-gg hh-mm-ss)
 - String nome
@@ -96,7 +96,7 @@ formato:
 /*
 formato:
 - double voto
-- String tipo (P, O, S)
+- String tipo ("Pratico", "Orale", "Scritto")
 - String data_inserimento (yyyy-mm-gg hh:mm:ss)
 - int id_studente 
 - id_assegnazione 
@@ -227,7 +227,7 @@ formato:
     var db = Mysql();
     final conn = await db.getConnection();
     var results = await conn.query(
-        "SELECT giustificata, String data_inizio, data_fine "
+        "SELECT giustificata, data_inizio, data_fine "
             "FROM assenze "
             "WHERE assenze.id_studente = '$idStudente';"
             );
@@ -289,6 +289,80 @@ formato:
     await conn.query(
         "INSERT INTO compiti (giustificata, data_inizio, data_fine, id_studente) "
             "VALUES ('$giustificata', '$data_inizio', '$data_fine', '$id_studente');"
+            );
+    await conn.close();
+  }
+
+/*
+formato:
+- String descrizione
+- DateTime data_inserimento
+- String nome (del docente)
+- String cognome (del docente)
+ */
+Future<List<Map<String, dynamic>>?> getNote(int idStudente) async {
+  var db = Mysql();
+  final conn = await db.getConnection();
+  var results = await conn.query(
+      "SELECT descrizione, data_inserimento, nome, cognome "
+          "FROM note_disciplinari "
+          "INNER JOIN docenti ON docenti.id_docente = note_disciplinari.id_docente "
+          "WHERE note_disciplinari.id_studente = '$idUtente_';");
+  await conn.close();
+  return results.map((row) => row.fields).toList();
+}
+
+/*
+formato:
+- String descrizione (max 400 char)
+- String data_inserimento (+, -, *, GR, IN, NTS, SU, IN, DI, BU, DST, OT)
+- int id_studente
+- int id_docente
+ */
+  void addNota(String descrizione, String data_inserimento, int id_studente, int id_docente) async {
+    var db = Mysql();
+    final conn = await db.getConnection();
+    await conn.query(
+        "INSERT INTO note_disciplinari (descrizione, data_inserimento, id_studente, id_docente) "
+            "VALUES ('$descrizione', '$data_inserimento', '$id_studente', '$id_docente');"
+            );
+    await conn.close();
+  }
+
+/*
+formato:
+- String descrizione
+- DateTime data_inserimento
+- String nome (del docente)
+- String cognome (del docente)
+- String nome_materia
+*/
+Future<List<Map<String, dynamic>>?> getArgomenti(int idStudente) async {
+  var db = Mysql();
+  final conn = await db.getConnection();
+  var results = await conn.query(
+      "SELECT descrizione, data_inserimento, nome, cognome, nome_materia "
+          "FROM argomenti "
+          "INNER JOIN assegnazioni ON assegnazioni.id_assegnazione = argomenti.id_assegnazione "
+          "INNER JOIN docenti ON assegnazioni.id_docente = docenti.id_docente "
+          "INNER JOIN materie ON assegnazioni.id_materia = materie.id_materia "
+          "WHERE assegnazioni.id_classe = '$idStudente';");
+  await conn.close();
+  return results.map((row) => row.fields).toList();
+}
+
+/*
+formato:
+- String descrizione (max 400 char) 
+- string data_inserimento (yyyy-mm-gg hh:mm:ss)
+- int id_assegnazione
+ */
+  void addArgomento(String descrizione, String data_inserimento, int id_assegnazione) async {
+    var db = Mysql();
+    final conn = await db.getConnection();
+    await conn.query(
+        "INSERT INTO argomenti (descrizione, data_inserimento, id_assegnazione) "
+            "VALUES ('$descrizione', '$data_inserimento', '$id_assegnazione');"
             );
     await conn.close();
   }

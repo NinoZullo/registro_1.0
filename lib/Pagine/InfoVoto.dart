@@ -20,17 +20,8 @@ class InfoVoto extends StatelessWidget {
     final String votoString = voto['voto'].toString();
     final String descrizione = voto['descrizione'].toString();
     final String insegnante = '${voto['nome']} ${voto['cognome']}';
+    final String tipologia = voto['tipo'].toString();
 
-    String tipologia;
-    if (voto['tipo'] == 'O') {
-      tipologia = 'Orale';
-    } else if (voto['tipo'] == 'S') {
-      tipologia = 'Scritto';
-    } else if (voto['tipo'] == 'P') {
-      tipologia = 'Pratico';
-    } else {
-      tipologia = 'Sconosciuta';
-    }
 
     return Scaffold(
       appBar: AppBar(
