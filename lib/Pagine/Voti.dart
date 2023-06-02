@@ -75,7 +75,7 @@ class _VotiState extends State<Voti> with SingleTickerProviderStateMixin {
 
   Widget buildCircularChart() {
     if (isLoading) {
-      return CircularProgressIndicator();
+      return const CircularProgressIndicator();
     } else {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 10.h),
