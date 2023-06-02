@@ -26,13 +26,13 @@ class _HomePageState extends State<HomePage> {
   final int _selectedIndex = 1;
   bool _isDarkMode = false;
 
-  
+
 
   void _toggleTheme() {
     setState(() {
     });
   }
-  
+
   int calculateRemainingDays() {
     final now = DateTime.now();
     final targetDate = DateTime(now.year, 6, 8);
@@ -293,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
               break;
-              case 2:
+            case 2:
               Navigator.push(
                 context,
                 MaterialPageRoute(

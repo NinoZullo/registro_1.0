@@ -13,14 +13,14 @@ class Voti extends StatefulWidget {
   State<Voti> createState() => _VotiState();
 }
 
-double? media;
-
 class _VotiState extends State<Voti> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>>? voti;
   DBMetodi db = DBMetodi();
-  bool isLoading = true;
   late AnimationController _controller;
-
+  late Animation<double> _animation;
+  final double _startValue = 0.0;
+  double _endValue = 10.0;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -30,22 +30,13 @@ class _VotiState extends State<Voti> with SingleTickerProviderStateMixin {
       vsync: this,
     );
 
-    // Verifica se la lista dei voti è già stata caricata
-    if (voti == null) {
-      fetchVoti();
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    _animation = Tween<double>(
+      begin: _startValue,
+      end: _endValue,
+    ).animate(_controller);
 
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        isLoading = false;
-      });
-    });
+    fetchVoti();
   }
-
 
   Future<void> fetchVoti() async {
     setState(() {
@@ -55,11 +46,15 @@ class _VotiState extends State<Voti> with SingleTickerProviderStateMixin {
     setState(() {
       voti = fetchedVoti;
       voti?.sort((b, a) => a['data_inserimento'].compareTo(b['data_inserimento']));
-      media = calcolaMedia(voti);
+      _endValue = calcolaMedia(voti) / 10.0;
+      _animation = Tween<double>(
+        begin: _startValue,
+        end: _endValue,
+      ).animate(_controller);
+      _controller.forward();
       isLoading = false;
     });
   }
-
 
   double calcolaMedia(List<Map<String, dynamic>>? voti) {
     if (voti == null || voti.isEmpty) return 0.0;
@@ -72,45 +67,52 @@ class _VotiState extends State<Voti> with SingleTickerProviderStateMixin {
     return somma / voti.length;
   }
 
-
   Widget buildCircularChart() {
     if (isLoading) {
       return const CircularProgressIndicator();
     } else {
+      final media = calcolaMedia(voti);
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 10.h),
-        child: CircularPercentIndicator(
-          radius: 50.0.r,
-          lineWidth: 13.0.w,
-          percent: media! / 10.0,
-          center: Text(
-            media!.toStringAsFixed(2),
-            style: TextStyle(
-              fontSize: 24.0.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          circularStrokeCap: CircularStrokeCap.round,
-          progressColor: getProgressColor(),
-          backgroundColor: Colors.grey.shade300,
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            final animatedValue = (media).toStringAsFixed(2);
+            return CircularPercentIndicator(
+              radius: 50.0.r,
+              lineWidth: 13.0.w,
+              percent: _animation.value,
+              center: Text(
+                animatedValue,
+                style: TextStyle(
+                  fontSize: 24.0.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              circularStrokeCap: CircularStrokeCap.round,
+              progressColor: getProgressColor(),
+              backgroundColor: Colors.grey.shade300,
+            );
+          },
         ),
       );
     }
   }
 
-
   Color getProgressColor() {
-    if (media! < 5) {
-      return Colors.red;
-    } else if (media! < 6) {
-      return Colors.yellow;
-    } else if (media! < 9) {
-      return Colors.green;
+    final value = _animation.value;
+
+    if (value < 5) {
+      return Color.lerp(Colors.red, Colors.orange, value * 3)!;
+    } else if (value < 6) {
+      return Color.lerp(Colors.orange, Colors.green, (value - 0.33) * 3)!;
     } else {
-      return Colors.blue;
+      return Color.lerp(Colors.green, Colors.blue, (value - 0.66) * 3)!;
     }
   }
+
+
 
   @override
   void dispose() {

@@ -31,7 +31,7 @@ class _AssenzeState extends State<Assenze> {
   }
 
   Future<void> fetchData() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     assenze = await db.getAssenze(idUtente_);
     assenzeGiustificate =
         assenze?.where((assenza) => assenza['giustificata'] == 1).toList();
