@@ -216,7 +216,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
                               fillColor: const Color(0xffd6e2ea),
                               filled: true,
                               hintText: "Username",
-                              prefixIcon: const Icon(Icons.email),
+                              prefixIcon: const Icon(Icons.person),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(color: Colors.black),
                                 borderRadius: BorderRadius.circular(10),
@@ -238,7 +238,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
                               fillColor: const Color(0xffd6e2ea),
                               filled: true,
                               hintText: "Password",
-                              prefixIcon: const Icon(Icons.password),
+                              prefixIcon: const Icon(Icons.lock_outline_rounded),
                               suffixIcon: GestureDetector(
                                 onTap: togglePasswordVisibility,
                                 child: Icon(

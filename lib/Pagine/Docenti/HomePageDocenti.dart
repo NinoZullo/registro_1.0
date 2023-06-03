@@ -1,65 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:registro/Pagine/Docenti/OrarioDocenti.dart';
-import 'package:registro/Pagine/Docenti/Classi.dart';
-import 'package:registro/metodi/Metodi.dart';
-import 'package:registro/Pagine/PaginaLogin.dart';
-import 'package:registro/mysql/Utente.dart';
-import 'package:day_night_switcher/day_night_switcher.dart';
+import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:registro/Pagine/Docenti/OrarioDocenti.dart";
+import "package:registro/Pagine/Docenti/Classi.dart";
+import "package:registro/metodi/Metodi.dart";
+import "package:registro/Pagine/PaginaLogin.dart";
+import "package:registro/mysql/Utente.dart";
+import "package:day_night_switcher/day_night_switcher.dart";
 
 class HomePageDocenti extends StatefulWidget {
   const HomePageDocenti({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageDocentiState createState() => _HomePageDocentiState();
 }
 
 class _HomePageDocentiState extends State<HomePageDocenti> {
-  int _selectedIndex = 1;
-  Brightness _currentBrightness = Brightness.light;
+  final int _selectedIndex = 1;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-  void _toggleTheme() {
-    setState(() {
-      _currentBrightness = _currentBrightness == Brightness.light
-          ? Brightness.dark
-          : Brightness.light;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    bool _isDarkMode = false;
+    bool isDarkMode = false;
+    // ignore: no_leading_underscores_for_local_identifiers
     void _toggleTheme() {
       setState(() {
-        _currentBrightness = _isDarkMode ? Brightness.dark : Brightness.light;
       });
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page '),
+        title: const Text("Home Page "),
         actions: [
           DayNightSwitcher(
-            isDarkModeEnabled: _isDarkMode,
+            isDarkModeEnabled: isDarkMode,
             onStateChanged: (isDarkModeEnabled) {
               setState(() {
-                _isDarkMode = isDarkModeEnabled;
+                isDarkMode = isDarkModeEnabled;
               });
               _toggleTheme();
             },
           ),
           IconButton(
-            icon: Icon(Icons.exit_to_app),
+            icon: const Icon(Icons.exit_to_app),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PaginaLogin(),
+                  builder: (context) => const PaginaLogin(),
                 ),
               );
             },
@@ -79,7 +68,7 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "$nome_", //TODO : ERRORE QUI
+                      "$nome_ $cognome_",
                       style: TextStyle(
                           fontSize: 20.w,
                           color: Colors.black,
@@ -211,11 +200,11 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
                 shrinkWrap: true,
                 children: [
                   Cont2("Verifica di Italiano"),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Cont2("Verifica di matematica"),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Cont2("Uscita didattica"),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Cont2("Verifica di sistemi"),
                 ],
               ),
@@ -236,7 +225,7 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Classi(),
+                  builder: (context) => const Classi(),
                 ),
               );
               break;
@@ -244,7 +233,7 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomePageDocenti(),
+                  builder: (context) => const HomePageDocenti(),
                 ),
               );
               break;
@@ -252,12 +241,11 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => OrarioDocenti(),
+                  builder: (context) => const OrarioDocenti(),
                 ),
               );
               break;
           }
-          ;
         },
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,

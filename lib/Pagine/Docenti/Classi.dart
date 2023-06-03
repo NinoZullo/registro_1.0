@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:registro/Pagine/Docenti/SelectedClass.dart';
-import 'package:registro/metodi/Metodi.dart';
 import 'package:registro/mysql/DBMetodi.dart';
-import 'package:registro/mysql/Utente.dart';
+import 'package:registro/Pagine/Docenti/StudentiClasse.dart';
+import '../../metodi/Metodi.dart';
+import '../../mysql/Utente.dart';
+import 'HomePageDocenti.dart';
+import 'OrarioDocenti.dart';
 
 class Classi extends StatefulWidget {
   const Classi({Key? key}) : super(key: key);
@@ -13,58 +15,121 @@ class Classi extends StatefulWidget {
 }
 
 class _ClassiState extends State<Classi> {
-  List<Map<String, dynamic>>? classi;
   DBMetodi db = DBMetodi();
-  @override
-  void initState() {
-    super.initState();
-    db.getClassi().then((value) {
-      setState(() {
-        classi = value;
-        print(classi);
-      });
-    });
+  final int _selectedIndex = 0;
+
+  Future<List<Map<String, dynamic>>?> getClassi() async {
+    return await db.getClassi(idUtente_);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Classi"),
-        centerTitle: true,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 0,
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.8,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
-        ),
-        itemCount: classi?.length ?? 0,
-        itemBuilder: (context, index) {
-          if (classi == null) {
-            return CircularProgressIndicator();
-          }
-
-          final classe = classi![index];
-          // final idAssegnazione = classe['id_assegnazione'].toString();
-          final nomeClasse = classe['nome_classe'].toString();
-          final nomeMateria = classe['nome_materia'].toString();
-          final idClasse = int.parse(classe['id_classe']);
-          return Padding(
-            padding: EdgeInsets.all(10.0.w),
-            child: Clas(
-              context,
-              Colors.cyan,
-              nomeClasse,
-              nomeMateria,
-              SelectedClass(
-                  className: nomeClasse,
-                  nomeMateria: nomeMateria,
-                  idClasse: idClasse),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0.h),
+            child: Text(
+              'Seleziona una classe',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-          );
+          ),
+          Expanded(
+            child: FutureBuilder<List<Map<String, dynamic>>?>(
+              future: getClassi(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error'));
+                } else if (snapshot.hasData) {
+                  final classi = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: classi.length,
+                    itemBuilder: (context, index) {
+                      final classe = classi[index];
+                      final idClasse = classe['id_classe'];
+                      final nomeClasse = classe['nome_classe'] as String;
+                      final nomeMateria = classe['nome_materia'] as String;
+
+                      return ListTile(
+                        title: Row(
+                          children: [
+                            const Icon(Icons.school, color: Colors.blue),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '$nomeClasse - $nomeMateria',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StudentiClasse(
+                                idClasse: idClasse,
+                                nomeClasse: nomeClasse,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(child: Text('No data'));
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        items: [
+          It("Classi", Icons.people_alt_rounded),
+          It("Home", Icons.home),
+          It("Orari", Icons.lock_clock),
+        ],
+        onTap: (currentIndex) {
+          switch (currentIndex) {
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePageDocenti(),
+                ),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OrarioDocenti(),
+                ),
+              );
+              break;
+          }
         },
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
       ),
     );
   }

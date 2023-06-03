@@ -315,7 +315,7 @@ Future<List<Map<String, dynamic>>?> getNote(int idStudente) async {
 /*
 formato:
 - String descrizione (max 400 char)
-- String data_inserimento (+, -, *, GR, IN, NTS, SU, IN, DI, BU, DST, OT)
+- String data_inserimento
 - int id_studente
 - int id_docente
  */
@@ -393,20 +393,20 @@ formato:
 - String nome_classe
 - String nome_materia
  */
-  Future<List<Map<String, dynamic>>?> getClassi() async {
+  Future<List<Map<String, dynamic>>?> getClassi(int idDocente) async {
     var db = Mysql();
     final conn = await db.getConnection();
     var results = await conn.query(
-        "SELECT id_assegnazione, nome_classe, nome_materia "
+        "SELECT id_assegnazione, assegnazioni.id_classe, nome_classe, nome_materia "
             "FROM assegnazioni "
             "INNER JOIN docenti ON assegnazioni.id_docente = docenti.id_docente "
             "INNER JOIN materie ON assegnazioni.id_materia = materie.id_materia "
             "INNER JOIN classi ON assegnazioni.id_classe = classi.id_classe "
-            "WHERE assegnazioni.id_docente = '$idUtente_';"
-            );
+            "WHERE assegnazioni.id_docente = $idDocente");
     await conn.close();
+    print(results.toList());
     return results.map((row) => row.fields).toList();
-  }
+    }
 
 /*
 formato:
