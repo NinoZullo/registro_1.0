@@ -43,11 +43,11 @@ class _StudentiClasseState extends State<StudentiClasse> {
                 final nome = studente['nome'] as String;
                 final cognome = studente['cognome'] as String;
                 final idStudente = studente['id_studente'] as int;
-
+                final idClasse = studente["id_classe"] as int;
                 return ListTile(
                   title: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.person,
                         color: Colors.blue,
                       ),
@@ -69,7 +69,7 @@ class _StudentiClasseState extends State<StudentiClasse> {
                         builder: (context) => AzioniStudente(
                           idStudente: idStudente,
                           nome: nome,
-                          cognome: cognome,
+                          cognome: cognome, idClasse: idClasse,
                         ),
                       ),
                     );

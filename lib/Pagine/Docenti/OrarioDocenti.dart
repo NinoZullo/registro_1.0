@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:registro/Pagine/Docenti/HomePageDocenti.dart';
 import 'package:registro/Pagine/Docenti/Classi.dart';
 import 'package:registro/metodi/Metodi.dart';
+
+import '../../mysql/DBMetodi.dart';
 
 class OrarioDocenti extends StatefulWidget {
   const OrarioDocenti({Key? key}) : super(key: key);
@@ -40,6 +43,11 @@ class _OrarioDocentiState extends State<OrarioDocenti> {
     });
   }
 
+  Future<List<Map<String, dynamic>>?> getOreDocenti() async {
+    DBMetodi db = DBMetodi();
+    return db.getOreDocenti();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,9 +70,18 @@ class _OrarioDocentiState extends State<OrarioDocenti> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         items: [
-          It("Classi", Icons.people_alt_rounded),
-          It("Home", Icons.home),
-          It("Orari", Icons.lock_clock),
+          BottomNavigationBarItem(
+            label: "Classi",
+            icon: Icon(Icons.people_alt_rounded),
+          ),
+          BottomNavigationBarItem(
+            label: "Home",
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            label: "Orari",
+            icon: Icon(Icons.lock_clock),
+          ),
         ],
         onTap: (currentIndex) {
           switch (currentIndex) {
@@ -136,28 +153,84 @@ class _OrarioDocentiState extends State<OrarioDocenti> {
   Widget _buildTableRow(String time) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              time,
-              style: TextStyle(fontSize: 16.sp, color: Colors.black),
-            ),
-          ),
-          Expanded(
-            flex: 4,
-            child: Container(
-              height: 40,
-              color: Colors.grey,
-              //Aggiungo contenuto cella
+      child: FutureBuilder<List<Map<String, dynamic>>?>(
+        future: getOreDocenti(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Errore durante il recupero dei dati');
+          } else if (snapshot.hasData) {
+            final oreDocenti = snapshot.data!;
+            return Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    time,
+                    style: TextStyle(fontSize: 16.sp, color: Colors.black),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    height: 40,
+                    color: _getHourColor(oreDocenti, time),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: oreDocenti.length,
+                      itemBuilder: (context, index) {
+                        final classe = oreDocenti[index];
+                        final oraInizio = classe['ora_inizio'] as Duration?;
+                        final oraFine = classe['ora_fine'] as Duration?;
+                        final nomeClasse = classe['nome_classe'] as String;
+                        final nomeMateria = classe['nome_materia'] as String;
 
+                        final isWorkingHour = _isCurrentHourWorking(oraInizio, oraFine, time);
 
-            ),
-          ),
-        ],
+                        return ListTile(
+                          title: Text(
+                            '$nomeClasse - $nomeMateria',
+                            style: TextStyle(
+                              color: isWorkingHour ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Text('Nessun dato disponibile');
+          }
+        },
       ),
     );
   }
-}
 
+  Color _getHourColor(List<Map<String, dynamic>> oreDocenti, String time) {
+    for (var ore in oreDocenti) {
+      final oraInizio = ore['ora_inizio'] as Duration?;
+      final oraFine = ore['ora_fine'] as Duration?;
+
+      if (_isCurrentHourWorking(oraInizio, oraFine, time)) {
+        return Colors.green;
+      }
+    }
+    return Colors.grey;
+  }
+
+  bool _isCurrentHourWorking(Duration? oraInizio, Duration? oraFine, String time) {
+    final currentTime = TimeOfDay.now();
+
+    if (oraInizio != null && oraFine != null) {
+      if (currentTime.hour >= oraInizio.inHours && currentTime.hour < oraFine.inHours) {
+        return time == '${currentTime.hour}:00';
+      }
+    }
+
+    return false;
+  }
+}

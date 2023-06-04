@@ -93,6 +93,7 @@ formato:
     return results.map((row) => row.fields).toList();
   }
 
+
 /*
 formato:
 - double voto
@@ -189,7 +190,7 @@ formato:
     var db = Mysql();
     final conn = await db.getConnection();
     await conn.query(
-        "INSERT INTO annotazioni (descrizione, data_i) "
+        "INSERT INTO annotazioni (descrizione, data_inserimento, id_tipo, id_studente, id_assegnazione) "
             "VALUES ('$descrizione', '$data_inserimento', '$id_tipo', '$id_studente', '$id_assegnazione');"
             );
     await conn.close();
@@ -242,13 +243,13 @@ formato:
 - Strin data_fine
 - int id_studente
  */
-  void addAssenza(String descrizione, String data_inserimento, int id_tipo, int id_studente, int id_assegnazione) async {
+  void addAssenza(int giustificata, String data_inizio, String data_fine, int id_studente) async {
     var db = Mysql();
     final conn = await db.getConnection();
     await conn.query(
-        "INSERT INTO assenze (descrizione, data_inserimento, id_tipo, id_studente, id_assegnazione) "
-            "VALUES ('$descrizione', '$data_inserimento', '$id_tipo', '$id_studente', '$id_assegnazione');"
-            );
+            "INSERT INTO assenze (giustificata, data_inizio, data_fine, id_studente) "
+                "VALUES ('$giustificata', '$data_inizio', '$data_fine', '$id_studente');"
+                );
     await conn.close();
   }
 
@@ -278,17 +279,16 @@ formato:
 
 /*
 formato:
-- int giustificata (0 = non giust./1 = giust.)
-- String data_inizio
-- Strin data_fine
-- int id_studente
+- scadenza (yyyy-mm-gg hh:mm:ss)
+- String descrizione (max 400 char)
+- inid_assegnazione
  */
-  void addCompito(int giustificata, String data_inizio, String data_fine, int id_studente) async {
+  void addCompito(String scadenza, String descrizione, int id_assegnazione) async {
     var db = Mysql();
     final conn = await db.getConnection();
     await conn.query(
-        "INSERT INTO compiti (giustificata, data_inizio, data_fine, id_studente) "
-            "VALUES ('$giustificata', '$data_inizio', '$data_fine', '$id_studente');"
+        "INSERT INTO compiti (scadenza, descrizione, id_assegnazione) "
+            "VALUES ('$scadenza', '$descrizione', '$id_assegnazione');"
             );
     await conn.close();
   }
