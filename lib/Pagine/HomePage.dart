@@ -5,6 +5,7 @@ import "package:intl/intl.dart";
 import "package:registro/Pagine/Annotazioni.dart";
 import "package:registro/Pagine/Argomenti.dart";
 import "package:registro/Pagine/Assenze.dart";
+import "package:registro/Pagine/AssistenteStudenti.dart";
 import "package:registro/Pagine/Calendario.dart";
 import "package:registro/Pagine/Compiti.dart";
 import "package:registro/Pagine/NoteDisciplinari.dart";
@@ -15,6 +16,8 @@ import "package:registro/Pagine/PaginaLogin.dart";
 import "package:registro/mysql/DBMetodi.dart";
 import "package:registro/mysql/Utente.dart";
 import "package:day_night_switcher/day_night_switcher.dart";
+
+//Pagina terminata ed Ottimizzata ✅
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,6 +41,7 @@ class _HomePageState extends State<HomePage> {
     final difference = targetDate.difference(now);
     return difference.inDays;
   }
+
   @override
   void initState() {
     super.initState();
@@ -95,7 +99,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Row(
               children: [
-                Icon(Icons.person, size: 40.w),
+                Icon(Icons.person_off, size: 40.w),
                 SizedBox(width: 10.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,6 +117,46 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 16.w, color: Colors.black),
                     ),
                   ],
+                ),
+                SizedBox(width: 65.w),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Profilo()),
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.w),
+                        child: Container(
+                          width: 40.w,
+                          height: 40.w,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blue,
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            size: 25.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5.h),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.w),
+                        child: Text(
+                          "Profilo",
+                          style: GoogleFonts.roboto(
+                            fontSize: 14.w,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -282,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     child: const Cont1(
-                        Colors.purple, Icons.account_balance, "Annotaz."),
+                        Colors.purple, Icons.account_balance, "Annotazioni"),
                   ),
                   SizedBox(width: 10.w),
                 ],
@@ -335,7 +379,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     );
-
                   }),
             ),
           ],
@@ -346,7 +389,7 @@ class _HomePageState extends State<HomePage> {
         items: [
           It("Calendario", Icons.calendar_month),
           It("Home", Icons.home),
-          It("Profilo", Icons.person),
+          It("Assistente", Icons.help),
         ],
         onTap: (currentIndex) {
           switch (currentIndex) {
@@ -354,7 +397,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Calendario(),
+                  builder: (context) => const Calendario(),
                 ),
               );
               break;
@@ -362,7 +405,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Profilo(),
+                  builder: (context) => const AssistenteStudenti(),
                 ),
               );
               break;
@@ -385,8 +428,8 @@ class Cont1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 140.w,
-      height: 120.h,
+      width: 130.w,
+      height: 110.h,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10.r),

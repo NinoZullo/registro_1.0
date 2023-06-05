@@ -3,10 +3,13 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:registro/mysql/DBMetodi.dart";
 
+//Pagina terminata ed Ottimizzata ✅
+
 class InserisciArgomento extends StatefulWidget {
   final int idClasse;
 
-  const InserisciArgomento({Key? key, required this.idClasse}) : super(key: key);
+  const InserisciArgomento({Key? key, required this.idClasse})
+      : super(key: key);
 
   @override
   State<InserisciArgomento> createState() => _InserisciArgomentoState();
@@ -14,8 +17,10 @@ class InserisciArgomento extends StatefulWidget {
 
 class _InserisciArgomentoState extends State<InserisciArgomento> {
   final TextEditingController _descrizioneController = TextEditingController();
-  final TextEditingController _dataInserimentoController = TextEditingController();
-  final TextEditingController _idAssegnazioneController = TextEditingController();
+  final TextEditingController _dataInserimentoController =
+      TextEditingController();
+  final TextEditingController _idAssegnazioneController =
+      TextEditingController();
   final DBMetodi _db = DBMetodi();
 
   @override
@@ -31,8 +36,16 @@ class _InserisciArgomentoState extends State<InserisciArgomento> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Caricato!" , style: GoogleFonts.roboto(color: Colors.green , fontSize: 18.sp ,)),
-          content: Text("Argomento inserito con successo", style: GoogleFonts.roboto(color: Colors.black , fontSize: 16.sp ,)),
+          title: Text("Caricato!",
+              style: GoogleFonts.roboto(
+                color: Colors.green,
+                fontSize: 18.sp,
+              )),
+          content: Text("Argomento inserito con successo",
+              style: GoogleFonts.roboto(
+                color: Colors.black,
+                fontSize: 16.sp,
+              )),
           actions: <Widget>[
             TextButton(
               child: const Text("OK"),
@@ -52,7 +65,9 @@ class _InserisciArgomentoState extends State<InserisciArgomento> {
     final dataInserimento = _dataInserimentoController.text;
     final idAssegnazione = int.tryParse(_idAssegnazioneController.text) ?? 0;
 
-    if (descrizione.isNotEmpty && dataInserimento.isNotEmpty && idAssegnazione != 0) {
+    if (descrizione.isNotEmpty &&
+        dataInserimento.isNotEmpty &&
+        idAssegnazione != 0) {
       _db.addArgomento(descrizione, dataInserimento, idAssegnazione);
       _descrizioneController.clear();
       _dataInserimentoController.clear();
@@ -63,8 +78,16 @@ class _InserisciArgomentoState extends State<InserisciArgomento> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Errore!" , style: GoogleFonts.roboto(color: Colors.red , fontSize: 18.sp ,)),
-            content: Text("Compila tutti i campi per piacere", style: GoogleFonts.roboto(color: Colors.black , fontSize: 16.sp ,)),
+            title: Text("Errore!",
+                style: GoogleFonts.roboto(
+                  color: Colors.red,
+                  fontSize: 18.sp,
+                )),
+            content: Text("Compila tutti i campi per piacere",
+                style: GoogleFonts.roboto(
+                  color: Colors.black,
+                  fontSize: 16.sp,
+                )),
             actions: <Widget>[
               TextButton(
                 child: const Text("OK"),
@@ -97,7 +120,7 @@ class _InserisciArgomentoState extends State<InserisciArgomento> {
                 labelText: "Descrizione",
                 border: OutlineInputBorder(),
               ),
-              style: const TextStyle(color: Colors.black),
+              style: GoogleFonts.roboto(color: Colors.black),
               maxLines: 5,
             ),
             const SizedBox(height: 16.0),
@@ -111,7 +134,8 @@ class _InserisciArgomentoState extends State<InserisciArgomento> {
                 ).then((selectedDate) {
                   if (selectedDate != null) {
                     setState(() {
-                      _dataInserimentoController.text = selectedDate.toString().substring(0, 10);
+                      _dataInserimentoController.text =
+                          selectedDate.toString().substring(0, 10);
                     });
                   }
                 });
@@ -125,7 +149,7 @@ class _InserisciArgomentoState extends State<InserisciArgomento> {
                   _dataInserimentoController.text.isNotEmpty
                       ? "Data Inserimento: ${_dataInserimentoController.text}"
                       : "Seleziona Data Inserimento",
-                  style: const TextStyle(color: Colors.black),
+                  style: GoogleFonts.roboto(color: Colors.black),
                 ),
               ),
             ),
@@ -137,7 +161,7 @@ class _InserisciArgomentoState extends State<InserisciArgomento> {
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
-              style: const TextStyle(color: Colors.black),
+              style: GoogleFonts.roboto(color: Colors.black),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(

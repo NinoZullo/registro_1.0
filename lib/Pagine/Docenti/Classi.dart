@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:registro/mysql/DBMetodi.dart';
-import 'package:registro/Pagine/Docenti/StudentiClasse.dart';
-import '../../metodi/Metodi.dart';
-import '../../mysql/Utente.dart';
-import 'HomePageDocenti.dart';
-import 'OrarioDocenti.dart';
+import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:registro/Pagine/Docenti/AssistenteDocenti.dart";
+import "package:registro/mysql/DBMetodi.dart";
+import "package:registro/Pagine/Docenti/StudentiClasse.dart";
+import "../../metodi/Metodi.dart";
+import "../../mysql/Utente.dart";
+import "HomePageDocenti.dart";
+//Pagina terminata ed Ottimizzata ✅
 
 class Classi extends StatefulWidget {
   const Classi({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _ClassiState extends State<Classi> {
           Padding(
             padding: EdgeInsets.all(16.0.h),
             child: Text(
-              'Seleziona una classe',
+              "Seleziona una classe",
               style: TextStyle(
                 fontSize: 20.sp,
                 color: Colors.black,
@@ -51,16 +52,16 @@ class _ClassiState extends State<Classi> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return const Center(child: Text('Error'));
+                  return const Center(child: Text("Errore nel caricamento"));
                 } else if (snapshot.hasData) {
                   final classi = snapshot.data!;
                   return ListView.builder(
                     itemCount: classi.length,
                     itemBuilder: (context, index) {
                       final classe = classi[index];
-                      final idClasse = classe['id_classe'];
-                      final nomeClasse = classe['nome_classe'] as String;
-                      final nomeMateria = classe['nome_materia'] as String;
+                      final idClasse = classe["id_classe"];
+                      final nomeClasse = classe["nome_classe"] as String;
+                      final nomeMateria = classe["nome_materia"] as String;
 
                       return ListTile(
                         title: Row(
@@ -70,7 +71,7 @@ class _ClassiState extends State<Classi> {
                               width: 10.w,
                             ),
                             Text(
-                              '$nomeClasse - $nomeMateria',
+                              "$nomeClasse - $nomeMateria",
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -94,7 +95,8 @@ class _ClassiState extends State<Classi> {
                     },
                   );
                 } else {
-                  return const Center(child: Text('No data'));
+                  return const Center(
+                      child: Text("Non sono stati trovati dati nel database"));
                 }
               },
             ),
@@ -106,7 +108,7 @@ class _ClassiState extends State<Classi> {
         items: [
           It("Classi", Icons.people_alt_rounded),
           It("Home", Icons.home),
-          It("Orari", Icons.lock_clock),
+          It("Assistente", Icons.help),
         ],
         onTap: (currentIndex) {
           switch (currentIndex) {
@@ -122,7 +124,7 @@ class _ClassiState extends State<Classi> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const OrarioDocenti(),
+                  builder: (context) => AssistenteDocenti(),
                 ),
               );
               break;

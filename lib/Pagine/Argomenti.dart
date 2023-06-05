@@ -3,6 +3,8 @@ import "package:intl/intl.dart";
 import "package:registro/mysql/DBMetodi.dart";
 import "package:registro/mysql/Utente.dart";
 
+//Pagina terminata ed Ottimizzata ✅
+
 class Argomenti extends StatefulWidget {
   const Argomenti({Key? key}) : super(key: key);
 

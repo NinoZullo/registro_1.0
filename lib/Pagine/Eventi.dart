@@ -1,37 +1,37 @@
 class Eventi {
-  String title;
-  String description;
+  String titolo;
+  String descrizione;
   DateTime startDate;
   DateTime endDate;
-  String className;
+  String nomeClasse;
 
   Eventi({
-    required this.title,
-    required this.description,
+    required this.titolo,
+    required this.descrizione,
     required this.startDate,
     required this.endDate,
-    required this.className,
+    required this.nomeClasse,
     required String nomeEvento,
   });
 
   factory Eventi.fromJson(Map<String, dynamic> json) {
     return Eventi(
-      title: json['title'],
-      description: json['description'],
+      titolo: json['title'],
+      descrizione: json['description'],
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
-      className: json['className'],
+      nomeClasse: json['className'],
       nomeEvento: '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'title': title,
-      'description': description,
+      'title': titolo,
+      'description': descrizione,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
-      'className': className,
+      'className': nomeClasse,
     };
   }
 }

@@ -1,12 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:registro/Pagine/Calendario.dart';
-import 'package:registro/Pagine/HomePage.dart';
-import 'package:registro/Palette/Palette.dart';
-import 'package:registro/metodi/Metodi.dart';
-import 'package:registro/Pagine/Widget/HeaderHeight.dart';
-import 'package:registro/mysql/Utente.dart';
-import 'package:intl/intl.dart';
+import "dart:io";
+
+import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:image_picker/image_picker.dart";
+import "package:intl/intl.dart";
+
+import "../Palette/Palette.dart";
+import "../metodi/Metodi.dart";
+import "../mysql/Utente.dart";
+import "Widget/HeaderHeight.dart";
+
+//Pagina terminata ed Ottimizzata ✅
 
 class Profilo extends StatefulWidget {
   const Profilo({Key? key}) : super(key: key);
@@ -28,24 +33,26 @@ class _ProfiloState extends State<Profilo> {
   }
 
   final double _headerHeight = 100.h;
-   int _currentIndex = 2;
   final bool isAttive = false;
   final bool isChecked = false;
   final bool isDarkMode = false;
+
+  late File _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedImage = File("");
+  }
 
   Widget customButton(
     BuildContext context,
     Color color,
     String text,
-    Widget destination,
+    Function() onPressed,
   ) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => destination),
-        );
-      },
+      onTap: onPressed,
       child: Container(
         width: 160.0.w,
         height: 90.0.h,
@@ -91,6 +98,55 @@ class _ProfiloState extends State<Profilo> {
     );
   }
 
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    // ignore: deprecated_member_use
+    final pickedImage = await picker.getImage(source: source);
+    if (pickedImage != null) {
+      setState(() {
+        _selectedImage = File(pickedImage.path);
+      });
+    }
+  }
+
+  void _showImagePicker() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.camera),
+                title: Text(
+                  "Scatta una foto",
+                  style: GoogleFonts.roboto(
+                      color: Colors.grey[700], fontSize: 18.sp),
+                ),
+                onTap: () {
+                  _pickImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: Text(
+                  "Scegli dalla galleria",
+                  style: GoogleFonts.roboto(
+                      color: Colors.grey[700], fontSize: 18.sp),
+                ),
+                onTap: () {
+                  _pickImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,15 +164,20 @@ class _ProfiloState extends State<Profilo> {
                   CircleAvatar(
                     radius: 40.r,
                     backgroundColor: blu1,
-                    child: Icon(
-                      Icons.person,
-                      size: 50.sp,
-                      color: Colors.white,
-                    ),
+                    child: _selectedImage.path.isNotEmpty
+                        ? Image.file(
+                            _selectedImage,
+                            fit: BoxFit.cover,
+                          )
+                        : Icon(
+                            Icons.person,
+                            size: 50.sp,
+                            color: Colors.white,
+                          ),
                   ),
                   SizedBox(height: 10.h),
                   Text(
-                    '$nome_ $cognome_',
+                    "$nome_ $cognome_",
                     style: TextStyle(
                       fontSize: 19.sp,
                       fontWeight: FontWeight.bold,
@@ -125,7 +186,7 @@ class _ProfiloState extends State<Profilo> {
                   ),
                   SizedBox(height: 10.h),
                   Text(
-                    'Studente',
+                    "Studente",
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
@@ -162,7 +223,7 @@ class _ProfiloState extends State<Profilo> {
                                     child: Align(
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        DateFormat('dd/MM/yyyy')
+                                        DateFormat("dd/MM/yyyy")
                                             .format(dataDiNascita_!),
                                         style: TextStyle(
                                           color: Colors.black,
@@ -186,47 +247,9 @@ class _ProfiloState extends State<Profilo> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendario',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profilo',
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            switch (index) {
-              case 0:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Calendario(),
-                  ),
-                );
-                break;
-              case 1:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePage(),
-                  ),
-                );
-                break;
-            }
-          });
-        },
-        selectedItemColor: blu1,
-        unselectedItemColor: Colors.grey,
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showImagePicker,
+        child: const Icon(Icons.edit),
       ),
     );
   }

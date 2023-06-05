@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:registro/mysql/DBMetodi.dart';
+import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:registro/mysql/DBMetodi.dart";
 
 //Pagina terminata ed Ottimizzata ✅
 
@@ -22,7 +22,7 @@ class _InserisciVotoState extends State<InserisciVoto> {
   final DBMetodi _db = DBMetodi();
 
   double _votoSelezionato = 5.0;
-  String _tipoSelezionato = 'Orale';
+  String _tipoSelezionato = "Orale";
   final List<double> _voti = [
     1.0,
     1.25,
@@ -62,7 +62,7 @@ class _InserisciVotoState extends State<InserisciVoto> {
     9.75,
     10.0
   ];
-  final List<String> _tipi = ['Orale', 'Scritto', 'Pratico'];
+  final List<String> _tipi = ["Orale", "Scritto", "Pratico"];
 
   @override
   void dispose() {
@@ -115,9 +115,9 @@ class _InserisciVotoState extends State<InserisciVoto> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Errore"),
+            title:  Text("Errore",style: GoogleFonts.roboto(color: Colors.red),),
             content:
-                const Text("Per favore, compila tutti i campi correttamente."),
+                 Text("Per favore, compila tutti i campi correttamente.",style: GoogleFonts.roboto(color: Colors.black),),
             actions: <Widget>[
               TextButton(
                 child: const Text("OK"),

@@ -2,10 +2,13 @@ import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:registro/mysql/DBMetodi.dart";
 
+//Pagina terminata ed Ottimizzata ✅
+
 class InserisciAnnotazione extends StatefulWidget {
   final int idStudente;
 
-  const InserisciAnnotazione({Key? key, required this.idStudente}) : super(key: key);
+  const InserisciAnnotazione({Key? key, required this.idStudente})
+      : super(key: key);
 
   @override
   State<InserisciAnnotazione> createState() => _InserisciAnnotazioneState();
@@ -15,11 +18,25 @@ class _InserisciAnnotazioneState extends State<InserisciAnnotazione> {
   DBMetodi db = DBMetodi();
 
   final TextEditingController _descrizioneController = TextEditingController();
-  final TextEditingController _dataInserimentoController = TextEditingController();
+  final TextEditingController _dataInserimentoController =
+      TextEditingController();
   final TextEditingController _idTipoController = TextEditingController();
-  final TextEditingController _idAssegnazioneController = TextEditingController();
+  final TextEditingController _idAssegnazioneController =
+      TextEditingController();
 
-  final List<String> tipiAnnotazione = ["+", "-", "*", "GR", "IN", "NTS", "SU", "DI", "BU", "DST", "OT"];
+  final List<String> tipiAnnotazione = [
+    "+",
+    "-",
+    "*",
+    "GR",
+    "IN",
+    "NTS",
+    "SU",
+    "DI",
+    "BU",
+    "DST",
+    "OT"
+  ];
   String selectedTipoAnnotazione = "+";
 
   @override
@@ -49,7 +66,7 @@ class _InserisciAnnotazioneState extends State<InserisciAnnotazione> {
                 labelText: "Descrizione",
                 border: OutlineInputBorder(),
               ),
-              style: const TextStyle(color: Colors.black),
+              style: GoogleFonts.roboto(color: Colors.black),
               maxLines: 5,
             ),
             const SizedBox(height: 16.0),
@@ -63,7 +80,8 @@ class _InserisciAnnotazioneState extends State<InserisciAnnotazione> {
                 ).then((selectedDate) {
                   if (selectedDate != null) {
                     setState(() {
-                      _dataInserimentoController.text = selectedDate.toString().substring(0, 10);
+                      _dataInserimentoController.text =
+                          selectedDate.toString().substring(0, 10);
                     });
                   }
                 });
@@ -77,7 +95,7 @@ class _InserisciAnnotazioneState extends State<InserisciAnnotazione> {
                   _dataInserimentoController.text.isNotEmpty
                       ? "Data Inserimento: ${_dataInserimentoController.text}"
                       : "Seleziona Data Inserimento",
-                  style: const TextStyle(color: Colors.black),
+                  style: GoogleFonts.roboto(color: Colors.black),
                 ),
               ),
             ),
@@ -94,10 +112,12 @@ class _InserisciAnnotazioneState extends State<InserisciAnnotazione> {
                 labelText: "Tipo Annotazione",
                 border: OutlineInputBorder(),
               ),
-              items: tipiAnnotazione.map<DropdownMenuItem<String>>((String value) {
+              items:
+                  tipiAnnotazione.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: const TextStyle(color: Colors.black)),
+                  child: Text(value,
+                      style: GoogleFonts.roboto(color: Colors.black)),
                 );
               }).toList(),
             ),
@@ -109,7 +129,7 @@ class _InserisciAnnotazioneState extends State<InserisciAnnotazione> {
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
-              style: const TextStyle(color: Colors.black),
+              style: GoogleFonts.roboto(color: Colors.black),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
@@ -117,12 +137,13 @@ class _InserisciAnnotazioneState extends State<InserisciAnnotazione> {
                 final descrizione = _descrizioneController.text;
                 final dataInserimento = _dataInserimentoController.text;
                 final idTipo = tipiAnnotazione.indexOf(selectedTipoAnnotazione);
-                final idAssegnazione = int.tryParse(_idAssegnazioneController.text) ?? 0;
+                final idAssegnazione =
+                    int.tryParse(_idAssegnazioneController.text) ?? 0;
 
                 db.addAnnotazione(
                   descrizione,
                   dataInserimento,
-                  idTipo as int,
+                  idTipo,
                   widget.idStudente,
                   idAssegnazione,
                 );

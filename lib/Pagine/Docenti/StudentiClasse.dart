@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:registro/mysql/DBMetodi.dart';
-import 'package:registro/Pagine/Docenti/AzioniStudente.dart';
+import "package:flutter/material.dart";
+import "package:registro/mysql/DBMetodi.dart";
+import "package:registro/Pagine/Docenti/AzioniStudente.dart";
+
+//Pagina terminata ed Ottimizzata ✅
 
 class StudentiClasse extends StatefulWidget {
   final int idClasse;
@@ -24,7 +26,7 @@ class _StudentiClasseState extends State<StudentiClasse> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Studenti della Classe - ${widget.nomeClasse}'),
+        title: Text("Studenti della Classe - ${widget.nomeClasse}"),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>?>(
@@ -33,16 +35,16 @@ class _StudentiClasseState extends State<StudentiClasse> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error'));
+            return const Center(child: Text("Error"));
           } else if (snapshot.hasData) {
             final studenti = snapshot.data!;
             return ListView.builder(
               itemCount: studenti.length,
               itemBuilder: (context, index) {
                 final studente = studenti[index];
-                final nome = studente['nome'] as String;
-                final cognome = studente['cognome'] as String;
-                final idStudente = studente['id_studente'] as int;
+                final nome = studente["nome"] as String;
+                final cognome = studente["cognome"] as String;
+                final idStudente = studente["id_studente"] as int;
                 final idClasse = studente["id_classe"] as int;
                 return ListTile(
                   title: Row(
@@ -53,7 +55,7 @@ class _StudentiClasseState extends State<StudentiClasse> {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        '$nome $cognome',
+                        "$nome $cognome",
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -78,7 +80,7 @@ class _StudentiClasseState extends State<StudentiClasse> {
               },
             );
           } else {
-            return const Center(child: Text('Impossibile Caricare gli studenti'));
+            return const Center(child: Text("Impossibile Caricare gli studenti"));
           }
         },
       ),

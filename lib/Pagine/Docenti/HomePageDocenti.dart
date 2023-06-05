@@ -1,11 +1,14 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:registro/Pagine/Docenti/OrarioDocenti.dart";
+import "package:google_fonts/google_fonts.dart";
 import "package:registro/Pagine/Docenti/Classi.dart";
 import "package:registro/metodi/Metodi.dart";
-import "package:registro/Pagine/PaginaLogin.dart";
-import "package:registro/mysql/Utente.dart";
-import "package:day_night_switcher/day_night_switcher.dart";
+import "package:url_launcher/url_launcher.dart";
+
+import "../../mysql/Utente.dart";
+import "../PaginaLogin.dart";
+import "AssistenteDocenti.dart";
+//Pagina terminata ed Ottimizzata ✅
 
 class HomePageDocenti extends StatefulWidget {
   const HomePageDocenti({Key? key}) : super(key: key);
@@ -18,30 +21,47 @@ class HomePageDocenti extends StatefulWidget {
 class _HomePageDocentiState extends State<HomePageDocenti> {
   final int _selectedIndex = 1;
 
+  final List<NewsArticle> newsArticles = [
+    NewsArticle(
+      title: "Guerra ucraina",
+      content: "Cremlino: Pronti al dialogo con gli Usa",
+    ),
+    NewsArticle(
+      title: "Omicidio Giulia Tramontano,",
+      content:
+          "Omicidio Giulia Tramontano, il difensore di Impagnatiello rinuncia al mandato",
+    ),
+    NewsArticle(
+      title: "Covid 19",
+      content:
+          "Una catena umana tra Bergamo e Brescia, l'unione simbolica dei cittadini a tre anni dal Covid19",
+    ),
+  ];
 
+  final List<Resource> resources = [
+    Resource(
+      title: "Corso JavaScript",
+      description: "Corso per imparare JavaScript",
+      url: "https://youtu.be/W6NZfCO5SIk",
+    ),
+    Resource(
+      title: "Corso C",
+      description: "Corso per imparare il linguaggio C",
+      url: "https://youtu.be/KJgsSFOSQv0",
+    ),
+    Resource(
+      title: "Corso java Swing",
+      description: "Corso Java swing",
+      url: "https://www.youtube.com/live/6zm8c6QFmjo?feature=share",
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = false;
-    // ignore: no_leading_underscores_for_local_identifiers
-    void _toggleTheme() {
-      setState(() {
-      });
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page "),
+        title: const Text("Home Page"),
         actions: [
-          DayNightSwitcher(
-            isDarkModeEnabled: isDarkMode,
-            onStateChanged: (isDarkModeEnabled) {
-              setState(() {
-                isDarkMode = isDarkModeEnabled;
-              });
-              _toggleTheme();
-            },
-          ),
           IconButton(
             icon: const Icon(Icons.exit_to_app),
             onPressed: () {
@@ -56,158 +76,98 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(top: 30.h, left: 10.w, right: 10.w),
+        padding: EdgeInsets.only(top: 30.0.h, left: 10.0.w, right: 10.0.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(Icons.person, size: 40.w),
-                SizedBox(width: 10.w),
+                Icon(Icons.person, size: 40.0.sp),
+                SizedBox(width: 10.0.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "$nome_ $cognome_",
-                      style: TextStyle(
-                          fontSize: 20.w,
+                      style: GoogleFonts.roboto(
+                          fontSize: 20.0,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       "Docente",
-                      style: TextStyle(fontSize: 16.w, color: Colors.black),
+                      style: GoogleFonts.roboto(
+                          fontSize: 16.0, color: Colors.black),
                     ),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 20.0.h),
+            SizedBox(height: 10.0.h),
             Container(
-              width: 600.w,
-              height: 75.h,
+              width: double.infinity,
+              height: 200.0,
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(10.r),
+                color: Colors.cyan.shade200,
+                borderRadius: BorderRadius.circular(10.0.r),
               ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: 10.w, top: 10.w, bottom: 5.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Assenze",
-                          style: TextStyle(fontSize: 15.w, color: Colors.black),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.h, left: 25.w),
-                          child: Text(
-                            "0",
-                            style:
-                                TextStyle(fontSize: 15.w, color: Colors.black),
-                          ),
-                        ),
-                      ],
+              child: Padding(
+                padding: EdgeInsets.all(10.0.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "News",
+                      style: GoogleFonts.roboto(
+                        fontSize: 20.0.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 20.w),
-                  VerticalDivider(
-                    color: Colors.grey,
-                    width: 1.w,
-                    thickness: 1.h,
-                    indent: 10.h,
-                    endIndent: 10.h,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: 25.w, top: 10.w, bottom: 5.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Ore PCTO",
-                          style: TextStyle(fontSize: 15.w, color: Colors.black),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.h, left: 23.w),
-                          child: Text(
-                            "12",
-                            style:
-                                TextStyle(fontSize: 15.w, color: Colors.black),
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 10.0.h),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: newsArticles.length,
+                        itemBuilder: (context, index) {
+                          final article = newsArticles[index];
+                          return ListTile(
+                            title: Text(
+                              article.title,
+                              style: GoogleFonts.roboto(
+                                fontSize: 16.0.sp,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              article.content,
+                              style: GoogleFonts.roboto(
+                                fontSize: 14.0.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 20.w),
-                  VerticalDivider(
-                    color: Colors.grey,
-                    width: 1.w,
-                    thickness: 1.h,
-                    indent: 10.h,
-                    endIndent: 10.h,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: 10.w, top: 10.w, bottom: 5.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Giorni rimanenti",
-                          style: TextStyle(fontSize: 14.w, color: Colors.black),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.h, left: 50.w),
-                          child: Text(
-                            "35",
-                            style:
-                                TextStyle(fontSize: 15.w, color: Colors.black),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 10.h),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Cont1(Colors.red, Icons.auto_graph, "Voti"),
-                  SizedBox(width: 10.w),
-                  Cont1(Colors.orange, Icons.no_accounts_sharp, "Assenze"),
-                  SizedBox(width: 10.w),
-                  Cont1(
-                      Colors.yellow, Icons.person_2_outlined, "Argomenti.dart"),
-                  SizedBox(width: 10.w),
-                  Cont1(Colors.green, Icons.edit, "   Note"),
-                  SizedBox(width: 10.w),
-                  Cont1(Colors.blue, Icons.edit, "Annotazioni"),
-                  SizedBox(width: 10.w),
-                ],
+            SizedBox(height: 10.0.h),
+            Text(
+              "Risorse per approfondimento",
+              style: GoogleFonts.roboto(
+                fontSize: 20.0.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20.h),
-            Expanded(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                children: [
-                  Cont2("Verifica di Italiano"),
-                  const SizedBox(height: 5),
-                  Cont2("Verifica di matematica"),
-                  const SizedBox(height: 5),
-                  Cont2("Uscita didattica"),
-                  const SizedBox(height: 5),
-                  Cont2("Verifica di sistemi"),
-                ],
-              ),
+            Column(
+              children: resources
+                  .map((resource) => buildResourceContainer(resource))
+                  .toList(),
             ),
           ],
         ),
@@ -217,7 +177,7 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
         items: [
           It("Classi", Icons.people_alt_rounded),
           It("Home", Icons.home),
-          It("Orari", Icons.lock_clock),
+          It("Assistente", Icons.help),
         ],
         onTap: (currentIndex) {
           switch (currentIndex) {
@@ -229,19 +189,11 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
                 ),
               );
               break;
-            case 1:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePageDocenti(),
-                ),
-              );
-              break;
             case 2:
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const OrarioDocenti(),
+                  builder: (context) => AssistenteDocenti(),
                 ),
               );
               break;
@@ -252,4 +204,58 @@ class _HomePageDocentiState extends State<HomePageDocenti> {
       ),
     );
   }
+
+  Widget buildResourceContainer(Resource resource) {
+    return GestureDetector(
+      onTap: () {
+        // ignore: deprecated_member_use
+        launch(resource.url);
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(16.0.w),
+        margin: EdgeInsets.only(bottom: 16.0.h),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(10.0.r),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              resource.title,
+              style: GoogleFonts.roboto(
+                fontSize: 16.0.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8.0.h),
+            Text(
+              resource.description,
+              style: GoogleFonts.roboto(
+                fontSize: 14.0,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NewsArticle {
+  final String title;
+  final String content;
+
+  NewsArticle({required this.title, required this.content});
+}
+
+class Resource {
+  final String title;
+  final String description;
+  final String url;
+
+  Resource({required this.title, required this.description, required this.url});
 }

@@ -134,23 +134,23 @@ formato:
     return results.map((row) => row.fields).toList();
   }
 
-/*
-formato:
-- String nome_evento (max 40 char)
-- String descrizione (max 400 char)
-- String data_inizio (yyyy-mm-gg hh:mm:ss)
-- String data_fine (yyyy-mm-gg hh:mm:ss)
-- int id_classe
- */
-  void addEvento(String nome_evento, String descrizione, String data_inizio, String data_fine, int id_classe) async {
-    var db = Mysql();
-    final conn = await db.getConnection();
-    await conn.query(
-        "INSERT INTO eventi (nome_evento, descrizione, data_inizio, data_fine, id_classe) "
-            "VALUES ('$nome_evento', '$descrizione', '$data_inizio', '$data_fine', '$id_classe');"
-            );
-    await conn.close();
-  }
+  /*
+  formato:
+  - String nome_evento (max 40 char)
+  - String descrizione (max 400 char)
+  - String data_inizio (yyyy-mm-gg hh:mm:ss)
+  - String data_fine (yyyy-mm-gg hh:mm:ss)
+  - int id_classe
+   */
+    void addEvento(String nome_evento, String descrizione, String data_inizio, String data_fine, int id_classe) async {
+      var db = Mysql();
+      final conn = await db.getConnection();
+      await conn.query(
+          "INSERT INTO eventi (nome_evento, descrizione, data_inizio, data_fine, id_classe) "
+              "VALUES ('$nome_evento', '$descrizione', '$data_inizio', '$data_fine', '$id_classe');"
+              );
+      await conn.close();
+    }
 
 /*
 formato:

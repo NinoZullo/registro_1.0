@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:registro/Palette/Palette.dart';
-import 'package:intl/intl.dart';
+import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_svg/svg.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:registro/Palette/Palette.dart";
+import "package:intl/intl.dart";
 
 
-double _headerHeight = 50.0.h;
+// ignore: non_constant_identifier_names
 BottomNavigationBarItem It(String title, IconData icon) {
   return BottomNavigationBarItem(
     icon: Icon(icon),
@@ -14,6 +15,7 @@ BottomNavigationBarItem It(String title, IconData icon) {
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget Cont1(Color circleColor, IconData icon, String text) {
   return Container(
     width: 115.w,
@@ -46,7 +48,7 @@ Widget Cont1(Color circleColor, IconData icon, String text) {
           top: 10.h,
           child: Text(
             text,
-            style: TextStyle(
+            style: GoogleFonts.roboto(
               fontSize: 14.sp,
               color: Colors.black,
             ),
@@ -76,7 +78,7 @@ Widget Cont2(String text) {
           top: 10.h,
           child: Text(
             text,
-            style: TextStyle(
+            style: GoogleFonts.roboto(
               fontSize: 14.sp,
               color: Colors.black,
             ),
@@ -87,6 +89,7 @@ Widget Cont2(String text) {
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget Cont3(String testo1) {
   return Container(
     width: 20.w,
@@ -106,7 +109,7 @@ Widget Cont3(String testo1) {
           top: 10.h,
           child: Text(
             testo1,
-            style: TextStyle(
+            style: GoogleFonts.roboto(
               fontSize: 14.sp,
               color: Colors.black,
             ),
@@ -142,7 +145,7 @@ Widget CustomButton(
           Center(
             child: Text(
               text,
-              style: TextStyle(
+              style: GoogleFonts.roboto(
                 fontSize: 16.0,
                 color: Colors.black,
               ),
@@ -154,6 +157,7 @@ Widget CustomButton(
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget ButtonSVG(
   BuildContext context,
   Color color,
@@ -186,7 +190,7 @@ Widget ButtonSVG(
             left: 5.w,
             child: Text(
               text,
-              style: TextStyle(
+              style: GoogleFonts.roboto(
                 fontSize: 19.0.sp,
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -218,6 +222,7 @@ Widget ButtonSVG(
     ),
   );
 }
+// ignore: non_constant_identifier_names
 
 Widget ContainerArgomenti({
   required String lessonTitle,
@@ -251,7 +256,7 @@ Widget ContainerArgomenti({
               children: [
                 Text(
                   lessonTitle,
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -260,7 +265,7 @@ Widget ContainerArgomenti({
                 Spacer(),
                 Text(
                   lessonDate,
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -272,7 +277,7 @@ Widget ContainerArgomenti({
           SizedBox(height: 10.h),
           Text(
             lessonDescription,
-            style: TextStyle(
+            style: GoogleFonts.roboto(
               color: Colors.black,
               fontWeight: FontWeight.w700,
             ),
@@ -282,7 +287,7 @@ Widget ContainerArgomenti({
     ),
   );
 }
-
+// ignore: non_constant_identifier_names
 Widget IconaD(String nomeDocente, String Ruolo) {
   return Column(
     children: [
@@ -298,7 +303,7 @@ Widget IconaD(String nomeDocente, String Ruolo) {
       SizedBox(height: 10.h),
       Text(
         nomeDocente,
-        style: TextStyle(
+        style: GoogleFonts.roboto(
           fontSize: 16.sp,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -307,7 +312,7 @@ Widget IconaD(String nomeDocente, String Ruolo) {
       SizedBox(height: 5.h),
       Text(
         Ruolo,
-        style: TextStyle(
+        style: GoogleFonts.roboto(
           fontSize: 16.sp,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -316,7 +321,7 @@ Widget IconaD(String nomeDocente, String Ruolo) {
     ],
   );
 }
-
+// ignore: non_constant_identifier_names
 Widget Prof(String testo1, String testo2) {
   return Padding(
     padding: EdgeInsets.only(left: 10.w, right: 10.w),
@@ -326,7 +331,7 @@ Widget Prof(String testo1, String testo2) {
           children: [
             Text(
               testo1,
-              style: TextStyle(
+              style: GoogleFonts.roboto(
                 color: Colors.black,
                 fontSize: 18.sp,
               ),
@@ -336,7 +341,7 @@ Widget Prof(String testo1, String testo2) {
                 alignment: Alignment.centerRight,
                 child: Text(
                   testo2,
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     color: Colors.black,
                     fontSize: 18.sp,
                   ),
@@ -356,12 +361,12 @@ Widget ContainerVoti({
   required String Descrizione,
   Color? color,
 }) {
-  final formattedDate = DateFormat('yyyy-MM-dd').format(Data);
-  final tipoVoto = Descrizione == 'Pratico'
-      ? 'Pratico'
-      : Descrizione == 'Scritto'
-      ? 'Scritto'
-      : 'Orale';
+  final formattedDate = DateFormat("yyyy-MM-dd").format(Data);
+  final tipoVoto = Descrizione == "Pratico"
+      ? "Pratico"
+      : Descrizione == "Scritto"
+      ? "Scritto"
+      : "Orale";
 
   return Padding(
     padding: EdgeInsets.only(
@@ -389,7 +394,7 @@ Widget ContainerVoti({
               children: [
                 Text(
                   "$Voto",
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -398,7 +403,7 @@ Widget ContainerVoti({
                 Spacer(),
                 Text(
                   "$formattedDate",
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -411,7 +416,7 @@ Widget ContainerVoti({
           SizedBox(height: 10.h),
           Text(
             tipoVoto,
-            style: TextStyle(
+            style:  GoogleFonts.roboto(
               color: Colors.black,
               fontWeight: FontWeight.w700,
             ),
@@ -459,7 +464,7 @@ Widget Clas(
               children: [
                 Text(
                   nomeClasse,
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     fontSize: 19.0.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -468,7 +473,7 @@ Widget Clas(
                 SizedBox(height: 4.h),
                 Text(
                   nomeMateria,
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     fontSize: 16.0.sp,
                     color: Colors.black,
                   ),

@@ -29,20 +29,15 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Registro elettronico',
+          title: "Registro elettronico",
           theme: ThemeData(
 
             primarySwatch: coloreStile,
             textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
           ),
-          home: Scaffold(
-            body: Stack(
-              children: const [
-                PaginaLogin(),
-              ],
-            ),
-          ),
-        );
+          home: PaginaLogin(),
+
+          );
       },
     );
   }

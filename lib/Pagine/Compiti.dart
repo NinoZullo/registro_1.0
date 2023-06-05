@@ -7,6 +7,8 @@ import "package:registro/mysql/DBMetodi.dart";
 import "package:registro/mysql/Utente.dart";
 import "package:registro/Pagine/InfoCompiti.dart";
 
+//Pagina terminata ed Ottimizzata ✅
+
 class Compiti extends StatefulWidget {
   const Compiti({Key? key}) : super(key: key);
 
@@ -70,42 +72,42 @@ class _CompitiState extends State<Compiti> {
           Expanded(
             child: compiti != null
                 ? ListView.builder(
-              itemCount: compiti!.length,
-              itemBuilder: (context, index) {
-                final compito = compiti![index];
-                final scadenza = _dateFormat.format(compito["scadenza"]);
+                    itemCount: compiti!.length,
+                    itemBuilder: (context, index) {
+                      final compito = compiti![index];
+                      final scadenza = _dateFormat.format(compito["scadenza"]);
 
-                final materia = compito["nome_materia"];
+                      final materia = compito["nome_materia"];
 
-                final isSelected = isExpanded && selectedIndex == index;
+                      final isSelected = isExpanded && selectedIndex == index;
 
-                return ListTile(
-                  leading: const CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    child: Icon(
-                      Icons.assignment,
-                      color: Colors.white,
-                    ),
-                  ),
-                  title: Text(
-                    "$materia - Scadenza: $scadenza",
-                    style:  GoogleFonts.roboto(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  onTap: () {
-                    navigateToInfoCompiti(compito);
-                    toggleExpandedState(index);
-                  },
-                  tileColor: isSelected ? Colors.grey.shade200 : null,
-                );
-              },
-            )
+                      return ListTile(
+                        leading: const CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          child: Icon(
+                            Icons.assignment,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Text(
+                          "$materia - Scadenza: $scadenza",
+                          style: GoogleFonts.roboto(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        onTap: () {
+                          navigateToInfoCompiti(compito);
+                          toggleExpandedState(index);
+                        },
+                        tileColor: isSelected ? Colors.grey.shade200 : null,
+                      );
+                    },
+                  )
                 : const Center(
-              child: CircularProgressIndicator(),
-            ),
+                    child: CircularProgressIndicator(),
+                  ),
           ),
         ],
       ),

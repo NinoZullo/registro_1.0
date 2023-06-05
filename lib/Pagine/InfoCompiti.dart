@@ -25,7 +25,6 @@ class InfoCompiti extends StatelessWidget {
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white,
-            
           ),
         ),
       ),

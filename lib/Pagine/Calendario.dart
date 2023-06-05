@@ -1,18 +1,22 @@
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:intl/intl.dart";
+import "package:registro/Pagine/AssistenteStudenti.dart";
 import "package:registro/Pagine/HomePage.dart";
-import "package:registro/Pagine/Profilo.dart";
 import "package:registro/metodi/Metodi.dart";
 import "package:registro/mysql/DBMetodi.dart";
 import "package:registro/mysql/Utente.dart";
+// ignore: depend_on_referenced_packages
 import "package:table_calendar/table_calendar.dart";
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import "package:flutter_screenutil/flutter_screenutil.dart";
 
 // PAGINA TERMINATA ED OTTIMIZZATA CON ANIMAZIONI ✅
 
 class Calendario extends StatefulWidget {
+  const Calendario({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _CalendarioState createState() => _CalendarioState();
 }
 
@@ -200,7 +204,7 @@ class _CalendarioState extends State<Calendario> {
         items: [
           It("Calendario", Icons.calendar_month),
           It("Home", Icons.home),
-          It("Profilo", Icons.person),
+          It("Assistente", Icons.help),
         ],
         onTap: (currentIndex) {
           switch (currentIndex) {
@@ -216,7 +220,7 @@ class _CalendarioState extends State<Calendario> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Profilo(),
+                  builder: (context) => const AssistenteStudenti(),
                 ),
               );
               break;

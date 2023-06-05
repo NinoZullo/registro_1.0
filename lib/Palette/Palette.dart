@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 const int _grayPrimary = 0xFF283141;
-final Color grey = Color(0xFFE0E0E0);
-final Color blue = Color(0xFF2196F3);
-final Color grigioB = Color(0xFFE5E5E5);
-final Color blu1 = Color(0xFF0D99FF);
-final Color azzurrino = Color(0xFFDBF0FF);
-final Color Viola = Color(0xFFDF7DFA);
+const Color grey = Color(0xFFE0E0E0);
+const Color blue = Color(0xFF2196F3);
+const Color grigioB = Color(0xFFE5E5E5);
+const Color blu1 = Color(0xFF0D99FF);
+const Color azzurrino = Color(0xFFDBF0FF);
+// ignore: constant_identifier_names
+const Viola = Color(0xFFDF7DFA);
 const gray = MaterialColor(_grayPrimary, _colorSwatch);
-final Color VV = Color(0xFF9f86c0);
+// ignore: constant_identifier_names
+const Color VV = Color(0xFF9f86c0);
 
 const Map<int, Color> _colorSwatch = {
   50: Colors.white,
@@ -20,7 +22,7 @@ const Map<int, Color> _colorSwatch = {
   600: Colors.black,
   700: Colors.black,
 };
-final MaterialColor coloreStile = MaterialColor(0xFF0096c7, {
+const MaterialColor coloreStile = MaterialColor(0xFF0096c7, {
   50: Color(0xFF2196f3),
   100: Color(0xFF2196f3),
   200: Color(0xFF2196f3),

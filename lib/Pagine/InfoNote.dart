@@ -4,12 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 // PAGINA TERMINATA ED OTTIMIZZATA CON ANIMAZIONI ✅
 
-
 class InfoNota extends StatelessWidget {
   final Map<String, dynamic> nota;
   final String formattedDate;
 
-  const InfoNota({Key? key, required this.nota, required this.formattedDate}) : super(key: key);
+  const InfoNota({Key? key, required this.nota, required this.formattedDate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,10 @@ class InfoNota extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Dettagli Nota",
-          style: GoogleFonts.roboto(fontSize: 20.sp, color: Colors.white, fontWeight: FontWeight.bold),
+          style: GoogleFonts.roboto(
+              fontSize: 20.sp,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(

@@ -3,6 +3,8 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:registro/mysql/DBMetodi.dart";
 
+//Pagina terminata ed Ottimizzata ✅
+
 class InserisciNota extends StatefulWidget {
   final int idStudente;
   final int idDocente;
@@ -44,11 +46,35 @@ class _InserisciNotaState extends State<InserisciNota> {
   }
 
   void _addNota() async {
-    String descrizione = _descrizioneController.text;
+    String descrizione = _descrizioneController.text.trim(); // Trim leading and trailing whitespace
     String dataInserimento =
-        _selectedDate != null ? _selectedDate.toString() : "";
+    _selectedDate != null ? _selectedDate.toString() : "";
     int idStudente = widget.idStudente;
     int idDocente = widget.idDocente;
+
+    if (descrizione.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Errore"),
+            content: Text(
+              "La descrizione non può essere vuota!",
+              style: GoogleFonts.roboto(color: Colors.black),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return; // Exit the method if the description is empty
+    }
 
     db.addNota(descrizione, dataInserimento, idStudente, idDocente);
 

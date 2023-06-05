@@ -43,6 +43,10 @@ dependencies:
   permission_handler: ^10.2.0
   day_night_switcher: 0.2.0+1
   percent_indicator: ^4.2.3
+  http: ^0.13.5
+  image_picker: ^0.8.7+5
+  url_launcher: ^6.1.11
+
 
 dev_dependencies:
   flutter_test:
@@ -66,7 +70,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/login.riv
-
+    - assets/F.png
 
   uses-material-design: true
 
