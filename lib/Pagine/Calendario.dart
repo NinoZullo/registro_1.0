@@ -220,7 +220,7 @@ class _CalendarioState extends State<Calendario> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AssistenteStudenti(),
+                  builder: (context) =>  AssistenteStudenti(),
                 ),
               );
               break;

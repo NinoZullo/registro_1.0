@@ -1,21 +1,10 @@
-/*
- * Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
- */
+import "dart:convert";
+import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:http/http.dart" as http;
+import "package:registro/mysql/Utente.dart";
 
-import 'dart:convert';
-
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:registro/Pagine/Docenti/api_key.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:registro/mysql/Utente.dart';
-
-//Pagina terminata ed Ottimizzata ✅
+import "Widget/APIKey.dart";
 
 class AssistenteStudenti extends StatefulWidget {
   const AssistenteStudenti({super.key});
@@ -26,25 +15,20 @@ class AssistenteStudenti extends StatefulWidget {
 }
 
 class _AssistenteStudentiState extends State<AssistenteStudenti> {
-  final List<Message> _messaggi = [];
-
+  final List<Message> _messages = [];
   final TextEditingController _textEditingController = TextEditingController();
 
   void onSendMessage() async {
     Message message = Message(text: _textEditingController.text, isMe: true);
-
     _textEditingController.clear();
-
     setState(() {
-      _messaggi.insert(0, message);
+      _messages.insert(0, message);
     });
 
     String response = await sendMessageToChatGpt(message.text);
-
     Message chatGpt = Message(text: response, isMe: false);
-
     setState(() {
-      _messaggi.insert(0, chatGpt);
+      _messages.insert(0, chatGpt);
     });
   }
 
@@ -68,17 +52,21 @@ class _AssistenteStudentiState extends State<AssistenteStudenti> {
       body: json.encode(body),
     );
 
+    Map<String, dynamic> parsedResponse = json.decode(response.body);
 
-    Map<String, dynamic> parsedReponse = json.decode(response.body);
+    String? reply =
+        parsedResponse["choices"]?[0]["message"]?["content"] as String?;
 
-    String reply = parsedReponse['choices'][0]['message']['content'];
+    if (reply == null) {
+      throw Exception("Failed to parse response");
+    }
 
     return reply;
   }
 
   Widget _buildMessage(Message message) {
-    final Color messageColor =
-    message.isMe ? sentMessageColor : receivedMessageColor;
+    Color backgroundColor = message.isMe ? Colors.green : Colors.blue;
+    Color textColor = message.isMe ? Colors.white : Colors.black;
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.0.w),
@@ -86,21 +74,21 @@ class _AssistenteStudentiState extends State<AssistenteStudenti> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: Column(
           crossAxisAlignment:
-          message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              message.isMe ? nome_ : 'Assistente',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              message.isMe ? nome_ : "Assistente",
+              style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
             ),
             Container(
-              decoration: BoxDecoration(
-                color: messageColor,
-                borderRadius: BorderRadius.circular(10.0.r),
-              ),
               padding: EdgeInsets.all(10.0.h),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               child: Text(
                 message.text,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: textColor),
               ),
             ),
           ],
@@ -113,23 +101,20 @@ class _AssistenteStudentiState extends State<AssistenteStudenti> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ChatGPT'),
+        title: const Text("Assistente Studente"),
       ),
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.background,
-              child: ListView.builder(
-                reverse: true,
-                itemCount: _messaggi.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _buildMessage(_messaggi[index]);
-                },
-              ),
+            child: ListView.builder(
+              reverse: true,
+              itemCount: _messages.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _buildMessage(_messages[index]);
+              },
             ),
           ),
-          const Divider(height: 1.0),
+          Divider(height: 1.0.h),
           Container(
             decoration: BoxDecoration(color: Theme.of(context).cardColor),
             child: Row(
@@ -139,10 +124,10 @@ class _AssistenteStudentiState extends State<AssistenteStudenti> {
                     controller: _textEditingController,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10.0),
-                      hintText: 'Fai una domanda...',
+                      hintText: "Fai qualche domanda",
                       border: InputBorder.none,
                     ),
-                    style: GoogleFonts.roboto(color: Colors.black),
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ),
                 IconButton(
@@ -154,6 +139,7 @@ class _AssistenteStudentiState extends State<AssistenteStudenti> {
           ),
         ],
       ),
+      backgroundColor: Colors.grey,
     );
   }
 }
@@ -164,6 +150,3 @@ class Message {
 
   Message({required this.text, required this.isMe});
 }
-
-const Color sentMessageColor = Colors.grey;
-const Color receivedMessageColor = Colors.green;

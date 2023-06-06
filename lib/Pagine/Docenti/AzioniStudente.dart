@@ -28,7 +28,7 @@ class AzioniStudente extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Azioni Studente"),
+        title: const Text("Inserisci"),
         centerTitle: true,
       ),
       body: Padding(
@@ -41,7 +41,7 @@ class AzioniStudente extends StatelessWidget {
             children: [
               ActionContainer(
                 Colore: Colors.blue,
-                Testo: "Inserisci Nota",
+                Testo: " Nota",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -56,7 +56,7 @@ class AzioniStudente extends StatelessWidget {
               ),
               ActionContainer(
                 Colore: Colors.blue,
-                Testo: "Inserisci Argomento",
+                Testo: " Argomento",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -69,7 +69,7 @@ class AzioniStudente extends StatelessWidget {
               ),
               ActionContainer(
                 Colore: Colors.blue,
-                Testo: "Inserisci Compito",
+                Testo: " Compito",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -81,7 +81,7 @@ class AzioniStudente extends StatelessWidget {
               ),
               ActionContainer(
                 Colore: Colors.blue,
-                Testo: "Inserisci Voto",
+                Testo: " Voto",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -94,7 +94,7 @@ class AzioniStudente extends StatelessWidget {
               ),
               ActionContainer(
                 Colore: Colors.blue,
-                Testo: "Inserisci Assenza",
+                Testo: " Assenza",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -107,7 +107,7 @@ class AzioniStudente extends StatelessWidget {
               ),
               ActionContainer(
                 Colore: Colors.blue,
-                Testo: "Inserisci Annotazione",
+                Testo: " Annotazione",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -120,7 +120,7 @@ class AzioniStudente extends StatelessWidget {
               ),
               ActionContainer(
                 Colore: Colors.blue,
-                Testo: "Inserisci Evento",
+                Testo: " Evento",
                 onPressed: () {
                   Navigator.push(
                     context,

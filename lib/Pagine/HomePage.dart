@@ -15,7 +15,6 @@ import "package:registro/metodi/Metodi.dart";
 import "package:registro/Pagine/PaginaLogin.dart";
 import "package:registro/mysql/DBMetodi.dart";
 import "package:registro/mysql/Utente.dart";
-import "package:day_night_switcher/day_night_switcher.dart";
 
 //Pagina terminata ed Ottimizzata ✅
 
@@ -29,11 +28,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final int _selectedIndex = 1;
-  bool _isDarkMode = false;
 
-  void _toggleTheme() {
-    setState(() {});
-  }
 
   int calculateRemainingDays() {
     final now = DateTime.now();
@@ -70,15 +65,6 @@ class _HomePageState extends State<HomePage> {
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold)),
         actions: [
-          DayNightSwitcher(
-            isDarkModeEnabled: _isDarkMode,
-            onStateChanged: (isDarkModeEnabled) {
-              setState(() {
-                _isDarkMode = isDarkModeEnabled;
-              });
-              _toggleTheme();
-            },
-          ),
           IconButton(
             icon: const Icon(Icons.exit_to_app),
             onPressed: () {
@@ -184,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                         Padding(
                           padding: EdgeInsets.only(top: 8.h, left: 25.w),
                           child: Text(
-                            "0",
+                            "4",
                             style: GoogleFonts.roboto(
                                 fontSize: 15.w, color: Colors.black),
                           ),
